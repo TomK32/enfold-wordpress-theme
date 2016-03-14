@@ -2,6 +2,7 @@
 
 global $avia_config;
 
+
 /*
  * if you run a child theme and dont want to load the default functions.php file
  * set the global var below in you childthemes function.php to true:
@@ -399,6 +400,7 @@ require_once( 'includes/helper-template-logic.php' ); 			// holds the template l
 require_once( 'includes/helper-social-media.php' ); 			// holds some helper functions necessary for twitter and facebook buttons
 require_once( 'includes/helper-post-format.php' ); 				// holds actions and filter necessary for post formats
 require_once( 'includes/helper-markup.php' ); 					// holds the markup logic (schema.org and html5)
+require_once( 'includes/admin/register-plugins.php');			// register the plugins we need
 
 if(current_theme_supports('avia_conditionals_for_mega_menu'))
 {
@@ -423,7 +425,7 @@ require_once( 'config-wordpress-seo/config.php' );				//compatibility with Yoast
 
 if(!current_theme_supports('deactivate_tribe_events_calendar'))
 {
-	require_once( 'config-events-calendar/config.php' );		//compatibility with the Events Calendar plugin
+	require_once( 'config-events-calendar/config.php' );			//compatibility with the Events Calendar plugin
 }
 
 if(is_admin())
@@ -466,7 +468,7 @@ if(!function_exists('avia_register_avia_widgets'))
 		register_widget( 'avia_partner_widget' );
 		register_widget( 'avia_google_maps' );
 		register_widget( 'avia_fb_likebox' );
-		register_widget( 'avia_instagram_widget' );
+		
 		
 	}
 

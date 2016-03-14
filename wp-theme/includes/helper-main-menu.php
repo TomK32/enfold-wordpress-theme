@@ -1,5 +1,4 @@
 <?php 
-global $avia_config;
 
 $responsive		= avia_get_option('responsive_active') != "disabled" ? "responsive" : "fixed_layout";
 $headerS 		= avia_header_setting();
@@ -75,25 +74,10 @@ if($headerS['header_topbar'] == true)
 			      </div>
 		</div>
 
-<?php } 
-	
-	
-	
-	$output 	 = "";
-	$temp_output = "";
-	$icon_beside = "";
-	
-	if($headerS['header_social'] == 'icon_active_main' && empty($headerS['bottom_menu']))
-	{
-		$icon_beside = " av_menu_icon_beside"; 
-	}
-	
-	
-	
-	
-	
-	
-?>
+<?php } ?>
+
+
+
 		<div  id='header_main' class='container_wrap container_wrap_logo'>
 	
         <?php
@@ -101,14 +85,13 @@ if($headerS['header_topbar'] == true)
         * Hook that can be used for plugins and theme extensions (currently:  the woocommerce shopping cart)
         */
         do_action('ava_main_header');
-        
         if($headerS['header_position'] != "header_top") do_action('ava_main_header_sidebar');
-		
+		?>
 	
-				 $output .= "<div class='container av-logo-container'>";
+				 <div class='container'>
 				 
-					$output .= "<div class='inner-container'>";
-						
+					<div class='inner-container'>
+						<?php
 						/*
 						*	display the theme logo by checking if the default logo was overwritten in the backend.
 						*   the function is located at framework/php/function-set-avia-frontend-functions.php in case you need to edit the output
@@ -119,43 +102,23 @@ if($headerS['header_topbar'] == true)
 							$addition = "<img src='".$headerS['header_replacement_logo']."' class='alternate' alt='' />";
 						}
 						
-						$output .= avia_logo(AVIA_BASE_URL.'images/layout/logo.png', $addition, 'strong', true);
+						echo avia_logo(AVIA_BASE_URL.'images/layout/logo.png', $addition, 'strong', true);
 						
-							if(!empty($headerS['bottom_menu']))
-							{
-								ob_start();
-								do_action('ava_before_bottom_main_menu'); // todo: replace action with filter, might break user customizations
-								$output .= ob_get_clean();
-							}
-							
-						    if($headerS['header_social'] == 'icon_active_main' && !empty($headerS['bottom_menu']))
-						    {
-							    $output .= $icons;
-						    }
+							if(!empty($headerS['bottom_menu'])) do_action('ava_before_bottom_main_menu');
+						    if($headerS['header_social'] == 'icon_active_main' && !empty($headerS['bottom_menu'])) echo $icons;
 						    
 						
 						/*
 						*	display the main navigation menu
 						*   modify the output in your wordpress admin backend at appearance->menus
 						*/
-						    
-						    if($headerS['bottom_menu'])
-						    { 
-							    $output .= "</div>";  
-								$output .= "</div>";
-								
-								if( !empty( $headerS['header_menu_above'] ))
-								{
-									$avia_config['temp_logo_container'] = "<div class='av-section-bottom-logo header_color'>".$output."</div>";
-									$output = "";
-								}
-								
-								$output .= "<div id='header_main_alternate' class='container_wrap'>";
-								$output .= "<div class='container'>";
-							}
+						    $extraOpen = $extraClose = $icon_beside = "";
+						    if($headerS['header_social'] == 'icon_active_main' && empty($headerS['bottom_menu'])){$icon_beside = " av_menu_icon_beside"; }
+						    if($headerS['bottom_menu']){ $extraClose = "</div></div><div id='header_main_alternate' class='container_wrap'><div class='container'>";  }
 						
+						    echo $extraClose;
 						
-						    $output .= "<nav class='main_menu' data-selectname='".__('Select a page','avia_framework')."' ".avia_markup_helper(array('context' => 'nav', 'echo' => false)).">";
+						    echo "<nav class='main_menu' data-selectname='".__('Select a page','avia_framework')."' ".avia_markup_helper(array('context' => 'nav', 'echo' => false)).">";
 						        $avia_theme_location = 'avia';
 						        $avia_menu_class = $avia_theme_location . '-menu';
 						        $args = array(
@@ -164,47 +127,34 @@ if($headerS['header_topbar'] == true)
 						            'menu_class'		=> 'menu av-main-nav',
 						            'container_class'	=> $avia_menu_class.' av-main-nav-wrap'.$icon_beside,
 						            'fallback_cb' 		=> 'avia_fallback_menu',
-						            'echo' 				=>	false, 
 						            'walker' 			=> new avia_responsive_mega_menu()
 						        );
 						
-						        $main_nav = wp_nav_menu($args);
-						        $output .= $main_nav;
+						        wp_nav_menu($args);
+						        
 						        
 						      
 						    /*
 						    * Hook that can be used for plugins and theme extensions
 						    */
-						    ob_start();
-						    do_action('ava_inside_main_menu'); // todo: replace action with filter, might break user customizations
-						    $output .= ob_get_clean();
+						    do_action('ava_inside_main_menu');
 						    
-						    if($icon_beside)
-						    {
-							    $output .= $icons; 
-						    }
+						    if($icon_beside) echo $icons; 
+						    
 						        
-						    $output .= '</nav>';
+						    echo '</nav>';
 						
 						    /*
 						    * Hook that can be used for plugins and theme extensions
 						    */
-						    ob_start();
-						    do_action('ava_after_main_menu'); // todo: replace action with filter, might break user customizations
-							$output .= ob_get_clean();
+						    do_action('ava_after_main_menu');
+						?>
 				
-					 /* inner-container */
-			        $output .= "</div>";
+					 <!-- end inner-container-->
+			        </div>
 						
-		        /* end container */
-		        $output .= " </div> ";
-		   		
-		   		
-		   		//output the whole menu     
-		        echo $output; 
-		        
-		        
-		   ?>
+		        <!-- end container-->
+		        </div>
 
 		<!-- end container_wrap-->
 		</div>

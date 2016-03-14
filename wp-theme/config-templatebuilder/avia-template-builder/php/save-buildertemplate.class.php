@@ -14,12 +14,8 @@ if ( !class_exists( 'aviaSaveBuilderTemplate' ) ) {
 	
 		function __construct($builder)
 		{
-			$this->builder = $builder;
-			
-			if($this->builder->disable_drag_drop == true) return;
-			
 			$this->actions_and_filters();
-		    
+		    $this->builder = $builder;
 		}
 		
 		/** 

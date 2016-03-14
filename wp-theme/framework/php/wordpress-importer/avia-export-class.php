@@ -18,7 +18,7 @@ if( !class_exists( 'avia_wp_export' ) )
 {
 	class avia_wp_export 
 	{
-		function __construct($avia_superobject)
+		function avia_wp_export($avia_superobject)
 		{
 			if(!isset($_GET['avia_export'])) return;
 		

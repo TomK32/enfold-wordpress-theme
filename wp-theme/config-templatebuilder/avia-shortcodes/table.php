@@ -213,7 +213,6 @@ if ( !class_exists( 'avia_sc_table' ) )
 				$atts 		= shortcode_atts(array('purpose' => 'pricing', 'caption' => '', 'responsive_styling' => 'avia_responsive_table', 'pricing_hidden_cells' => '', 'pricing_table_design' => 'avia_pricing_default'), $atts, $this->config['shortcode']);
 				$depth		= 2;
 				$table_rows = ShortcodeHelper::shortcode2array($content, $depth);
-				
 				$output 	= "";
 				
 				if(empty($table_rows)) return;
@@ -330,11 +329,8 @@ if ( !class_exists( 'avia_sc_table' ) )
 				$output .= "<tbody>";	
 				$counter = 0;
 				
-				
 				foreach($table_rows as $rk => $row)
 				{	
-					$responsive_style_nth_modifier = 1;
-					
 					if(empty($row['attr'])) $row['attr'] = array();
 					$row_attributes = array_merge(array('row_style' => ""), $row['attr']);
 				
@@ -348,17 +344,9 @@ if ( !class_exists( 'avia_sc_table' ) )
 						$tag = $row_attributes['row_style'] == 'avia-heading-row' ? "th" : "td";
 						$tag = $cell_attributes['col_style'] == 'avia-desc-col' ? "th" : $tag;
 						
-						if($row_attributes['row_style'] == 'avia-heading-row' && $cell_attributes['col_style'] == 'avia-desc-col')
-						{
-							//fixes issues like
-							//http://www.kriesi.at/support/topic/display-of-a-table-displays-wron-headlines-on-mobile/.
-							
-							$responsive_style_nth_modifier = 0;
-						}
-						
 						if($rk == 0 && $tag == "th")
 						{
-							$responsive_style .= ".avia-table-".self::$table_count." td:nth-of-type(".($counter + $responsive_style_nth_modifier)."):before { content: '".$row['content'][$counter]['content']."'; } ";
+							$responsive_style .= ".avia-table-".self::$table_count." td:nth-of-type(".($counter + 1)."):before { content: '".$row['content'][$counter]['content']."'; } ";
 							$counter ++;
 						}
 						

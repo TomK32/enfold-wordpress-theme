@@ -30,11 +30,10 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 			
 			function extra_assets()
 			{
-				if(is_admin() && isset($_POST['action']) && $_POST['action'] == "avia_ajax_av_google_map" )
+				if(is_admin())
 				{
 					$prefix  = is_ssl() ? "https" : "http";
-					
-            		wp_register_script( 'avia-google-maps-api', $prefix.'://maps.google.com/maps/api/js', array('jquery'), '3', true);
+            		wp_register_script( 'avia-google-maps-api', $prefix.'://maps.google.com/maps/api/js?sensor=false', array('jquery'), '3', true);
 					
 					$load_google_map_api = apply_filters('avf_load_google_map_api', true, 'av_google_map');
 					            

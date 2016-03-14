@@ -32,7 +32,7 @@ if( !class_exists( 'avia_megamenu' ) )
 		 * replaces the default menu with custom functions and classes within this file
 		 * @package 	AviaFramework
 		 */
-		function __construct()
+		function avia_megamenu()
 		{
 			//adds stylesheet and javascript to the menu page
 			add_action('admin_menu', array(&$this,'avia_menu_header'));
@@ -621,29 +621,19 @@ if( !function_exists( 'avia_fallback_menu' ) )
 	 * Create a navigation out of pages if the user didnt create a menu in the backend
 	 *
 	 */
-	function avia_fallback_menu($params)
+	function avia_fallback_menu()
 	{
-		$output  = "";
 		$current = "";
 		$exclude = avia_get_option('frontpage');
 		if (is_front_page()){$current = "class='current-menu-item'";}
 		if ($exclude) $exclude ="&exclude=".$exclude;
 
-		$output .= "<div class='fallback_menu av-main-nav-wrap'>";
-		$output .= "<ul class='avia_mega menu av-main-nav'>";
-		$output .= "<li $current><a href='".get_bloginfo('url')."'>".__('Home','avia_framework')."</a></li>";
-		$output .= wp_list_pages('echo=0&title_li=&sort_column=menu_order'.$exclude);
-		$output .= apply_filters('avf_fallback_menu_items', "", 'fallback_menu');
-		$output .= "</ul></div>";
-		
-		if($params['echo'])
-		{
-			echo $output;
-		}
-		else
-		{
-			return $output;
-		}
+		echo "<div class='fallback_menu av-main-nav-wrap'>";
+		echo "<ul class='avia_mega menu av-main-nav'>";
+		echo "<li $current><a href='".get_bloginfo('url')."'>".__('Home','avia_framework')."</a></li>";
+		wp_list_pages('title_li=&sort_column=menu_order'.$exclude);
+		echo apply_filters('avf_fallback_menu_items', "", 'fallback_menu');
+		echo "</ul></div>";
 	}
 }
 

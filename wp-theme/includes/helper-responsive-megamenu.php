@@ -85,7 +85,7 @@ if( !class_exists( 'avia_responsive_mega_menu' ) )
 		* Constructor that sets the grid variables
 		*
 		*/
-		function __construct($options = array())
+		function avia_responsive_mega_menu($options = array())
 		{
 			$this->grid_array = array(
 

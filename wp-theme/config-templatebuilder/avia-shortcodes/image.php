@@ -69,6 +69,22 @@ if ( !class_exists( 'avia_sc_image' ) )
 												__('No special alignment', 'avia_framework' ) =>'',
 												)
 							),
+
+					array(
+							"name" 	=> __("Image Fade in Animation", 'avia_framework' ),
+							"desc" 	=> __("Add a small animation to the image when the user first scrolls to the image position. This is only to add some 'spice' to the site and only works in modern browsers", 'avia_framework' ),
+							"id" 	=> "animation",
+							"type" 	=> "select",
+							"std" 	=> "no-animation",
+							"subtype" => array(
+												__('None',  'avia_framework' ) =>'no-animation',
+												__('Pop up',  'avia_framework' ) =>'pop-up',
+												__('Top to Bottom',  'avia_framework' ) =>'top-to-bottom',
+												__('Bottom to Top',  'avia_framework' ) =>'bottom-to-top',
+												__('Left to Right',  'avia_framework' ) =>'left-to-right',
+												__('Right to Left',  'avia_framework' ) =>'right-to-left',
+												)
+							),
 					
 					array(
 							"name" 	=> __("Image Styling", 'avia_framework' ),
@@ -236,46 +252,6 @@ if ( !class_exists( 'avia_sc_image' ) )
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
-				
-				array(
-							"type" 	=> "tab",
-							"name"	=> __("Animation",'avia_framework' ),
-							'nodescription' => true
-						),
-				
-				
-				array(
-							"name" 	=> __("Image Fade in Animation", 'avia_framework' ),
-							"desc" 	=> __("Add a small animation to the image when the user first scrolls to the image position. This is only to add some 'spice' to the site and only works in modern browsers", 'avia_framework' ),
-							"id" 	=> "animation",
-							"type" 	=> "select",
-							"std" 	=> "no-animation",
-							"subtype" => array(
-								__('None',  'avia_framework' ) =>'no-animation',
-								
-								__('Fade Animations',  'avia_framework') => array(
-									__('Fade in',  'avia_framework' ) =>'fade-in',
-									__('Pop up',  'avia_framework' ) =>'pop-up',
-								),
-								__('Slide Animations',  'avia_framework') => array(
-									__('Top to Bottom',  'avia_framework' ) =>'top-to-bottom',
-									__('Bottom to Top',  'avia_framework' ) =>'bottom-to-top',
-									__('Left to Right',  'avia_framework' ) =>'left-to-right',
-									__('Right to Left',  'avia_framework' ) =>'right-to-left',
-									),
-								__('Rotate',  'avia_framework') => array(
-									__('Full rotation',  'avia_framework' ) =>'av-rotateIn',
-									__('Bottom left rotation',  'avia_framework' ) =>'av-rotateInUpLeft',
-									__('Bottom right rotation',  'avia_framework' ) =>'av-rotateInUpRight',
-									)
-								)
-					),
-				
-				array(
-							"type" 	=> "close_div",
-							'nodescription' => true
-						),
-				
 					
 				array(
 							"type" 	=> "close_div",

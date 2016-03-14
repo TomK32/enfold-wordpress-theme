@@ -62,7 +62,6 @@ html.responsive { min-width: 0px; }
   overflow: visible; /*needed for cart icon */
 }
 
-
 /* Nested Column Classes */
 body .unit.alpha, body .units.alpha, body div .first {
   margin-left: 0;

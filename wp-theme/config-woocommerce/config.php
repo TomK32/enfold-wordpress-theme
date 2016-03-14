@@ -7,6 +7,7 @@ function avia_woocommerce_enabled()
 	return false;
 }
 
+
 global $avia_config;
 
 //product thumbnails
@@ -60,10 +61,7 @@ else
 }
 
 
-if ( class_exists( 'WC_Bookings' ) )
-{
-	// require_once( 'config-woocommerce-bookings/config.php' ); //compatibility with woocommerce plugin
-}
+
 
 
 
@@ -855,10 +853,7 @@ function avia_woocommerce_parallax_banner($bg, $overlay, $opacity, $description,
 	$output = "";
 					
 	$output .='<div id="av_product_description" class="avia-section main_color avia-section-large avia-no-border-styling avia-full-stretch av-parallax-section av-section-color-overlay-active avia-bg-style-parallax container_wrap fullsize" data-section-bg-repeat="stretch" '.$font.'>';
-	$output .='<div class="av-parallax  avia-full-stretch" data-avia-parallax-ratio="0.3">';
-	$output .='<div class="av-parallax-inner" style="'.$bg.' main_color background-attachment: scroll; background-position: 50% 50%; background-repeat: no-repeat;">';
-	$output .='</div>';
-	$output .='</div>';
+	$output .='<div class="av-parallax  avia-full-stretch" data-avia-parallax-ratio="0.3" style="'.$bg.' background-attachment: scroll; background-position: 50% 50%; background-repeat: no-repeat;"></div>';
 	
 	
 	$output .='<div class="av-section-color-overlay-wrap">';

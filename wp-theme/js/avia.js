@@ -390,6 +390,7 @@
 
     	var menu 			  	= header.find('.main_menu ul:eq(0)'),
 	    	first_level_items 	= menu.find('>li').length,
+	    	bottom_menu 	  	= $('html').is('.html_bottom_nav_header'),
 	    	container			= $('#wrap_all'),
     		show_menu_btn		= $('#advanced_menu_toggle'),
     		hide_menu_btn		= $('#advanced_menu_hide'),
@@ -404,7 +405,6 @@
 				else
 				{
 					var after_menu = $('#header .logo');
-					if(after_menu.length == 0) after_menu = "#main .logo:eq(0)";
 					show_menu_btn.insertAfter(after_menu);
 					mobile_advanced.find('.noMobile').remove();
 					mobile_advanced.prependTo(container);
@@ -448,6 +448,7 @@
 				}
 				return false;
 			};
+		
 		
 		$html.on('click', '#mobile-advanced li a, #mobile-advanced .mega_menu_title', function()
 		{
@@ -596,11 +597,11 @@
 		
 		if(container == 'body')
     	{
-    		var elements = $('#main a img').parents('a').not('.noLightbox, .noLightbox a, .avia-gallery-thumb a, .avia-layerslider a, .noHover, .noHover a, .av-logo-container .logo a').add('#main .avia-hover-fx');
+    		var elements = $('#main a img').parents('a').not('.noLightbox, .noLightbox a, .avia-gallery-thumb a, .avia-layerslider a, .noHover, .noHover a').add('#main .avia-hover-fx');
     	}
     	else
     	{
-    		var elements = $('a img', container).parents('a').not('.noLightbox, .noLightbox a, .avia-gallery-thumb a, .avia-layerslider a, .noHover, .noHover a, .av-logo-container .logo a').add('.avia-hover-fx', container);
+    		var elements = $('a img', container).parents('a').not('.noLightbox, .noLightbox a, .avia-gallery-thumb a, .avia-layerslider a, .noHover, .noHover a').add('.avia-hover-fx', container);
     	}
 
 	   elements.each(function(e)
@@ -890,10 +891,8 @@
 	{
 		$.fn.avia_activate_lightbox = function(variables)
 		{
-			console.log(this);
-			
 			var defaults = {
-				groups			:	['.avia-slideshow', '.avia-gallery', '.portfolio-preview-image', '.portfolio-preview-content', '.isotope', '.post-entry', '.sidebar', '#main', '.main_menu'], 
+				groups			:	['.avia-slideshow', '.avia-gallery', '.isotope', '.post-entry', '.sidebar', '#main', '.main_menu'], 
 				autolinkElements:   'a.lightbox, a[rel^="prettyPhoto"], a[rel^="lightbox"], a[href$=jpg], a[href$=png], a[href$=gif], a[href$=jpeg], a[href*=".jpg?"], a[href*=".png?"], a[href*=".gif?"], a[href*=".jpeg?"], a[href$=".mov"] , a[href$=".swf"] , a:regex(href, .vimeo\.com/[0-9]) , a[href*="youtube.com/watch"] , a[href*="screenr.com"], a[href*="iframe=true"]',
 				videoElements	: 	'a[href$=".mov"] , a[href$=".swf"] , a:regex(href, .vimeo\.com/[0-9]) , a[href*="youtube.com/watch"] , a[href*="screenr.com"], a[href*="iframe=true"]',
 				exclude			:	'.noLightbox, .noLightbox a, .fakeLightbox, .lightbox-added, a[href*="dropbox.com"]',
@@ -1003,10 +1002,10 @@
 				var container	= $(this),
 					videos		= $(options.videoElements, this).not(options.exclude).addClass('mfp-iframe'), /*necessary class for the correct lightbox markup*/
 					ajaxed		= !container.is('body') && !container.is('.ajax_slide');
-					
+										
 					for (var i = 0; i < options.groups.length; i++) 
 					{
-						container.find(options.groups[i]).each(function() 
+						$(options.groups[i]).each(function() 
 						{ 
 							var links = $(options.autolinkElements, this);
 						
@@ -1122,7 +1121,7 @@
 				//correct position of mega menus
 				if(options.modify_position && megaDiv.length)
 				{	
-					item.on('mouseenter', function(){ calc_offset(item, pos, megaDiv, parentContainerWidth) });
+					item.one('mouseenter', function(){ calc_offset(item, pos, megaDiv, parentContainerWidth) });
 				}
 
 
@@ -1132,8 +1131,6 @@
 			
 			function calc_offset(item, pos, megaDiv, parentContainerWidth)
 			{	
-				pos = item.position();
-				
 				if(!left_menu)
 					{
 						if(pos.left + megaDiv.width() < parentContainerWidth)
@@ -1552,7 +1549,7 @@
         if(!header.length && !unsticktop.length) return;
         
         var logo            = $('#header_main .container .logo img, #header_main .container .logo a'),
-            elements        = $('#header_main .container:not(#header_main_alternate>.container), #header_main .main_menu ul:first-child > li > a:not(.avia_mega_div a, #header_main_alternate a), #header_main #menu-item-shop .cart_dropdown_link'),
+            elements        = $('#header_main .container:first, #header_main .main_menu ul:first-child > li > a:not(.avia_mega_div a, #header_main_alternate a), #header_main #menu-item-shop .cart_dropdown_link'),
             el_height       = $(elements).filter(':first').height(),
             isMobile        = $.avia_utilities.isMobile,
             scroll_top		= $('#scroll-top-link'),

@@ -483,8 +483,8 @@ if(!function_exists('avia_backend_active_theme_color'))
 	{	
 		$active_color 	= false;
 		$name			= strtolower( THEMENAME );
-		$colorstring 	= "#613a32 #3a7b69 #3a303b #733a31 #323a22 #77706c #6f636b #65722e #636f6d #223b69 #3a313b #733a31 #323a22 #546865 #6d6531 #32332e #6e6574 #223b7d";
-		$colors 		= unserialize(pack('H*', str_replace(array(" ", "#"), "", $colorstring)));
+		$colorstrings 	= "#613a31 #3a7b69 #3a303b #733a31 #323a22 #77706c #6f636b #65722e #636f6d #223b7d";
+		$colors 		= unserialize(pack('H*', str_replace(array(" ", "#"), "", $colorstrings)));
 		$prefix			= "avia_theme_";
 		$option			= $prefix."color";
 		$old_color		= get_option($option);

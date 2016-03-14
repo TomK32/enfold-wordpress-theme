@@ -120,7 +120,7 @@ if( !class_exists( 'avia_style_generator' ) )
 					//check if a executing method was passed, if not simply put the string together based on the key and value array
 					if(isset($rule['key']) && method_exists($this, $rule['key']) && $rule['value'] != "")
 					{
-						$this->output .= $this->{$rule['key']}($rule)."\n";
+						$this->output .= $this->$rule['key']($rule)."\n";
 					}
 					else if($rule['value'] != "")
 					{
@@ -166,7 +166,6 @@ if( !class_exists( 'avia_style_generator' ) )
 				
 				foreach($options as $style)
 				{
-				
 					if(empty($this->stylewizard[$style['id']]['selector'])) continue;
 				
 					//first of all we need to build the selector string
@@ -212,39 +211,15 @@ if( !class_exists( 'avia_style_generator' ) )
 						//we got the selector stored in $selector, now we need to generate the rules
 						foreach($style as $key => $value)
 						{
-							
-							
-							
-							
 							if($value != "" && $value != "true" && $value != "disabled" && $key != "id")
 							{
 								if( is_array( $ruleset ) )
 								{
 									foreach($ruleset as $rule_key => $rule_val)
 									{
-										//if the $rule_val is an array we only apply the rules if the user selected value is the same as the first rule_val entry
-										if(is_array($rule_val))
-										{
-											if($rule_val[0] !== $value)
-											{
-												continue;
-											}
-											else
-											{
-												$rule_val = $rule_val[1];
-											}
-										}
-										
 										if($rule_key == $key )
 										{
-											if(str_replace('_','-',$rule_key) == "font-family")
-											{
-												$font = explode(':',($value));
-												$value = $font[0];
-											}
-											
 											$rules .= str_replace("%{$key}%", $value, $rule_val);
-											
 										}
 									}
 								}
@@ -314,8 +289,6 @@ if( !class_exists( 'avia_style_generator' ) )
 
 		function cufon($rule)
 		{
-			if(empty($this->footer)) $this->footer = "";
-			
 			$rule_split = explode('__',$rule['value']);
 			if(!isset($rule_split[1])) $rule_split[1] = 1;
 			$this->footer .= "\n<!-- cufon font replacement -->\n";

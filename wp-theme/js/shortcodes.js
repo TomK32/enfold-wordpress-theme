@@ -84,9 +84,6 @@
 
 			$('.avia_animate_when_visible', container).avia_waypoints();
 			$('.avia_animate_when_almost_visible', container).avia_waypoints({ offset: '80%'});
-			
-			if(container == 'body') container = '.avia_desktop body';
-			$('.av-animated-generic', container).avia_waypoints({ offset: '95%'});
 		}
 	}
 
@@ -98,7 +95,7 @@
 		//activates the form shortcode
 		if($.fn.avia_ajax_form)
 		{
-			$('.avia_ajax_form:not( .avia-disable-default-ajax )', container).avia_ajax_form();
+			$('.avia_ajax_form', container).avia_ajax_form();
 		}
 		
 		activate_waypoints(container);
@@ -140,7 +137,6 @@
 			$('.av_font_icon', container).avia_sc_animation_delayed({delay:100});
 			$('.avia-image-container', container).avia_sc_animation_delayed({delay:100});
 			$('.av-hotspot-image-container', container).avia_sc_animation_delayed({delay:100});
-			$('.av-animated-generic', container).avia_sc_animation_delayed({delay:100});
 		}
 
 		//activates animation for iconlist
@@ -455,7 +451,7 @@
 	{
 		loading: false, 
 		finished: false, 
-		src: 'https://maps.googleapis.com/maps/api/js?v=3.6&callback=aviaOnGoogleMapsLoaded' 
+		src: 'https://maps.googleapis.com/maps/api/js?v=3.6&sensor=false&callback=aviaOnGoogleMapsLoaded' 
 	}
 	
   	$.AviaMapsAPI.prototype =
@@ -1260,7 +1256,6 @@ $.fn.avia_masonry = function(options)
 		  		data		= current.data(),
 		  		masonry 	= current.parents('.av-masonry:eq(0)'),
 		  		container	= masonry.find('.av-masonry-container'),
-		  		items		= masonry.find('.av-masonry-entry'),
 		  		loader		= $.avia_utilities.loading(),
 		  		finished	= function(){ loading = false; loader.hide(); the_body.trigger('av_resize_finished'); };
 		  	
@@ -1268,12 +1263,7 @@ $.fn.avia_masonry = function(options)
 		  	if(!data.offset){ data.offset = 0; }	
 		  	data.offset += data.items;
 		  	data.action = 'avia_ajax_masonry_more';
-		  	data.loaded = []; //prevents duplicate entries from beeing loaded when randomized is active
 		  	
-		  	items.each(function(){
-			  	var item_id = $(this).data('av-masonry-item');
-			  	if(item_id) data.loaded.push( item_id );
-		  	});
 		  	
 		  	 $.ajax({
 				url: avia_framework_globals.ajaxurl,
@@ -1314,7 +1304,7 @@ $.fn.avia_masonry = function(options)
 								
 								loader.hide();
 								container.isotope( 'insert', new_items); 
-								$.avia_utilities.avia_ajax_call(masonry);
+								$.avia_utilities.avia_ajax_call(container);
 								setTimeout( function(){ methods.show_bricks( new_items , finished); },150);
 								setTimeout(function(){ the_win.trigger('av-height-change'); }, 550);
 								if(links)
@@ -2742,12 +2732,10 @@ $.fn.avia_sc_tabs= function(options)
 			//trigger number animation
 			number_container.addClass('number_prepared').on('avia_start_animation', function()
 			{
-				if(number_container.is('.avia_animation_done')) return;
-				number_container.addClass('avia_animation_done');
-				
 				elements.each(function(i)
 				{
 					var element = $(this), countTo = element.data('number'), fakeCountTo = countTo, current = parseInt(element.text(),10), zeroOnly = /^0+$/.test(countTo), increment = 0;
+					
 					
 					//fallback for decimals like 00 or 000
 					if(zeroOnly && countTo !== 0) fakeCountTo = countTo.replace(/0/g, '9');
@@ -2808,8 +2796,36 @@ $.fn.avia_sc_tabs= function(options)
 					});
 				}
 			
+			
+			
+			function send_ajax_form()
+			{
+				if(form_sent){ return false; }
 
-			function checkElements( e )
+				form_sent = true;
+				send.button.addClass('av-sending-button');
+				send.button.val(send.button.data('sending-label'));
+				
+				var redirect_to = form.data('avia-redirect') || false,
+					action		= form.attr('action');
+				
+				responseContainer.load(action+' '+options.responseContainer, send.dataObj, function()
+				{
+					if(redirect_to && action != redirect_to)
+					{
+						form.attr('action', redirect_to);
+						location.href = redirect_to;
+						// form.submit();
+					}
+					else
+					{
+						responseContainer.removeClass('hidden').css({display:"block"});
+						form.slideUp(400, function(){responseContainer.slideDown(400, function(){ $('body').trigger('av_resize_finished'); }); send.formElements.val('');});
+					}
+				});
+			}
+
+			function checkElements()
 			{
 				// reset validation var and send data
 				send.validationError = false;
@@ -2913,137 +2929,10 @@ $.fn.avia_sc_tabs= function(options)
 
 				if(send.validationError == false)
 				{
-					if(form.data('av-custom-send'))
-					{
-						mailchimp_send();	
-					}
-					else
-					{
-						send_ajax_form();
-					}
+					send_ajax_form();
 				}
-				
 				return false;
 			}
-			
-			
-			function send_ajax_form()
-			{
-				if(form_sent){ return false; }
-
-				form_sent = true;
-				send.button.addClass('av-sending-button');
-				send.button.val(send.button.data('sending-label'));
-				
-				var redirect_to = form.data('avia-redirect') || false,
-					action		= form.attr('action');
-				
-				responseContainer.load(action+' '+options.responseContainer, send.dataObj, function()
-				{
-					if(redirect_to && action != redirect_to)
-					{
-						form.attr('action', redirect_to);
-						location.href = redirect_to;
-						// form.submit();
-					}
-					else
-					{
-						responseContainer.removeClass('hidden').css({display:"block"});
-						form.slideUp(400, function(){responseContainer.slideDown(400, function(){ $('body').trigger('av_resize_finished'); }); send.formElements.val('');});
-					}
-				});
-			}
-			
-			
-			function mailchimp_send()
-			{
-				if(form_sent){ return false; }
-
-				form_sent = true;
-				
-				var original_label = send.button.val();
-
-				send.button.addClass('av-sending-button');
-				send.button.val(send.button.data('sending-label'));
-				send.dataObj.ajax_mailchimp = true;
-				
-				var redirect_to 		= form.data('avia-redirect') || false,
-					action				= form.attr('action'),
-					error_msg_container = form.find('.av-form-error-container'),
-					form_id 			= form.data('avia-form-id'); 
-				
-				$.ajax({
-					url: action,
-					type: "POST",
-					data:send.dataObj,
-					beforeSend: function()
-					{
-						if(error_msg_container.length)
-						{
-							error_msg_container.slideUp(400, function()
-							{
-								error_msg_container.remove();
-								$('body').trigger('av_resize_finished');
-							});
-						}
-					},
-					success: function(responseText)
-					{
-						var response	= jQuery("<div>").append(jQuery.parseHTML(responseText)),
-							error		= response.find('.av-form-error-container');	
-						
-						if(error.length)
-						{
-							form_sent = false;
-							form.prepend(error);
-							error.css({display:"none"}).slideDown(400, function()
-							{
-								$('body').trigger('av_resize_finished');
-							});
-
-							send.button.removeClass('av-sending-button');
-							send.button.val(original_label);
-						}
-						else
-						{
-							if(redirect_to && action != redirect_to)
-							{
-								form.attr('action', redirect_to);
-								location.href = redirect_to;
-								// form.submit();
-							}
-							else
-							{
-								var success_text = response.find(options.responseContainer + "_" + form_id);
-								
-								responseContainer.html(success_text).removeClass('hidden').css({display:"block"});
-								
-								form.slideUp(400, function()
-								{
-									responseContainer.slideDown(400, function()
-									{ 
-										$('body').trigger('av_resize_finished'); 
-									});
-									
-								send.formElements.val('');
-							});
-							}
-						}
-						
-					},
-					error: function()
-					{
-						
-					},
-					complete: function()
-					{
-					    
-					}
-				});
-
-			}
-			
-			
 		});
 	};
 })(jQuery);
@@ -3896,8 +3785,7 @@ $.extend( $.easing,
 		{
 			$.avia_utilities.supported.transition = $.avia_utilities.supports('transition');
 		}
-		
-		
+
 
 		if($.avia_utilities.supported.transition !== false )
 		{
@@ -3950,14 +3838,9 @@ $.extend( $.easing,
 						prop[$.avia_utilities.supported.transition+"transform"] = "translateZ(0)";
 					}
 					
-					var endTriggered = false;
-					
 					element.on(end,  function(event)
 					{
 						if(event.target != event.currentTarget) return false;
-						
-						if(endTriggered == true) return false;
-						endTriggered = true;
 
 						cssRule[prefix] = "none";
 
@@ -3965,15 +3848,6 @@ $.extend( $.easing,
 						element.css(cssRule);
 						setTimeout(function(){ callback.call(element); });
 					});
-					
-					
-					//desktop safari fallback if we are in another tab to trigger the end event
-					setTimeout(function(){ 
-						if(!endTriggered && !avia_is_mobile && $('html').is('.avia-safari') ) { 
-							element.trigger(end); 
-							$.avia_utilities.log('Safari Fallback '+end+' trigger'); 
-						}
-					}, speed + 100);
 					
 					setTimeout(function(){ element.css(cssRule);},10);
 					setTimeout(function(){ element.css(prop);	},20);
@@ -4311,11 +4185,8 @@ Avia Slideshow
     		}
     		else
     		{
-	    		if(this.options.keep_pading != true)
-	    		{
-    				self.$sliderUl.css('padding',0);
-					self.$win.trigger('av-height-change');
-				}
+    			self.$sliderUl.css('padding',0);
+    			self.$win.trigger('av-height-change');
     		}
     		
     		first_slide.css({visibility:'visible', opacity:0}).avia_animate({opacity:1}, function()
@@ -4340,8 +4211,8 @@ Avia Slideshow
 
     	//calculate which slide should be displayed next and call the executing transition function
     	_navigate : function( dir, pos ) {
-			
-			if( this.isAnimating || this.itemsCount < 2 || !this.$slider.is(":visible") )
+
+			if( this.isAnimating || this.itemsCount < 2 )
 			{
 				return false;
 			}
@@ -4424,7 +4295,7 @@ Avia Slideshow
 		{
 			//if images are attached as bg images the slider has a fixed height
 			if(this.options.bg_slider == true) return;
-			
+		
 			var self    		= this,
 				slide 			= this.$slides.eq(this.current),
 				current			= Math.floor(this.$sliderUl.height()),
@@ -4434,7 +4305,7 @@ Avia Slideshow
 				video_toppos 	= slide.data('video-toppos'); //forced video top position
 				
 				this.$sliderUl.height(current).css('padding',0); //make sure to set the slideheight to an actual value
-				
+
 				if(setTo != current)
 				{
 					if(instant == true)
@@ -4538,7 +4409,7 @@ Avia Slideshow
 		//slide animation: do a slide transition by css3 transform if possible. if not simply do a position left transition
 		_slide_animate: function( reset , transition , transition2 )
 		{
-			
+		
 			var self			= this,
 				displaySlide 	= this.$slides.eq(this.current),
 				hideSlide		= this.$slides.eq(this.prev);
@@ -4550,7 +4421,7 @@ Avia Slideshow
 				displaySlide.css(reset);
 				
 				hideSlide.avia_animate(transition, this.options.transitionSpeed, this.options.easing);
-				
+
 				var after_slide = function()
 				{
 					self.isAnimating = false;
@@ -4583,7 +4454,6 @@ Avia Slideshow
 					displaySlide.addClass('active-slide');
 					hideSlide.css({visibility:'hidden', zIndex:2}).removeClass('active-slide');
 					self.$slider.trigger('avia-transition-done');
-					
 				};
 			
 			hideSlide.trigger('pause');	
@@ -4592,7 +4462,7 @@ Avia Slideshow
 			if(self.options.fullfade == true)
 			{
 				hideSlide.avia_animate({opacity:0}, 200, 'linear', function()
-				{	
+				{
 					displaySlide.css(properties).avia_animate({opacity:1}, self.options.transitionSpeed, 'linear',fadeCallback);				
 				});
 			}
@@ -4734,7 +4604,7 @@ Avia Slideshow
 			this.slideshow = new this._timer( function()
 			{
 				self._navigate( 'next' );
-		
+	
 				if ( self.options.autoplay )
 				{
 					self._startSlideshow();
@@ -4756,7 +4626,7 @@ Avia Slideshow
 
 		// public method: shows next image
 		next : function(e)
-		{	
+		{
 			e.preventDefault();
 			this._stopSlideshow();
 			this._navigate( 'next' );

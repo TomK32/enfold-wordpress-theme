@@ -26,16 +26,10 @@
 			<div class='container template-blog '>
 
 				<main class='content <?php avia_layout_class( 'content' ); ?> units' <?php avia_markup_helper(array('context' => 'content','post_type'=>'post'));?>>
-					
-					<?php 
-						
-						$tds =  term_description(); 
-						if($tds)
-						{
-							echo "<div class='category-term-description'>{$tds}</div>";
-						}
-					?>
-                    
+
+                    <div class="category-term-description">
+                        <?php echo term_description(); ?>
+                    </div>
 
                     <?php
                     $avia_config['blog_style'] = apply_filters('avf_blog_style', avia_get_option('blog_style','multi-big'), 'archive');

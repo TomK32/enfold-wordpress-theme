@@ -102,49 +102,6 @@ if(!function_exists('avia_woo_dynamic_css'))
 	
 			";
 			
-			//bookings menu
-			$output .= "
-			$key .wc-bookings-booking-form .block-picker li a, #top $key .wc-bookings-date-picker .ui-datepicker td{
-			border-color: $border;	
-			}
-			
-			#top $key .wc-bookings-booking-form .block-picker li a:hover,
-			#top $key .wc-bookings-booking-form .block-picker li a:focus,
-			#top $key .wc-bookings-booking-form .block-picker li a.selected{
-			background-color: $primary !important;
-			color:$constant_font !important;
-			}
-			
-			#top $key .wc-bookings-date-picker legend .wc-bookings-date-picker-choose-date, #top $key .wc-bookings-date-picker .ui-datepicker-header{
-			border-color: $primary;
-			background-color: $primary;
-			color:$constant_font;
-			}
-			
-			$key .wc-bookings-date-picker .ui-datepicker td.bookable a{
-			background-color: $primary !important;
-			color:$constant_font !important;
-			border-color: $border;
-			}
-			
-			#top $key .wc-bookings-date-picker .ui-datepicker th,
-			#top $key .wc-bookings-date-picker .ui-datepicker td .ui-state-default{
-			color:$color;	
-			}
-			
-			#top $key .wc_bookings_field_start_date, #top $key .wc-bookings-date-picker span.label{
-				color: $meta;
-			}
-			
-			#top $key .wc-bookings-booking-form .wc-bookings-booking-cost, #top $key .wc-bookings-date-picker .ui-datepicker td.ui-datepicker-other-month{
-				background-color: $bg2;
-			}
-			
-			#top .wc-bookings-booking-form .blockUI.blockOverlay{
-				background-color: $bg !important;
-			}
-			
-			";
 			
 			//sort menu
 			$output .= "

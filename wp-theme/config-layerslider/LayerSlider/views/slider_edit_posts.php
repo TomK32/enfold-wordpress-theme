@@ -1,4 +1,10 @@
-<?php if(!defined('LS_ROOT_FILE')) {  header('HTTP/1.0 403 Forbidden'); exit; }
+<!-- Post Options -->
+<?php
+
+if(!defined('LS_ROOT_FILE')) { 
+	header('HTTP/1.0 403 Forbidden');
+	exit;
+}
 
 $queryArgs = array('post_status' => 'publish', 'limit' => 30, 'posts_per_page' => 30);
 
@@ -38,7 +44,7 @@ $posts = LS_Posts::find($queryArgs)->getParsedObject();
 			<div class="ls-post-filters clearfix">
 
 				<!-- Post types -->
-				<select data-param="post_type" name="post_type" class="multiple" multiple="multiple">
+				<select data-param="post_type" name="post_type[]" class="multiple" multiple="multiple">
 					<?php foreach($postTypes as $item) : ?>
 					<?php if(isset($slider['properties']['post_type']) &&  in_array($item['slug'], $slider['properties']['post_type'])) : ?>
 					<option value="<?php echo $item['slug'] ?>" selected="selected"><?php echo ucfirst($item['name']) ?></option>
@@ -49,7 +55,7 @@ $posts = LS_Posts::find($queryArgs)->getParsedObject();
 				</select>
 
 				<!-- Post categories -->
-				<select data-param="post_categories" name="post_categories" class="multiple" multiple="multiple">
+				<select data-param="post_categories" name="post_categories[]" class="multiple" multiple="multiple">
 					<option value="0"><?php _e("Don't filter categories", "LayerSlider") ?></option>
 					<?php foreach ($postCategories as $item): ?>
 					<?php if(isset($slider['properties']['post_categories']) && in_array($item->term_id, $slider['properties']['post_categories'])) : ?>
@@ -61,7 +67,7 @@ $posts = LS_Posts::find($queryArgs)->getParsedObject();
 				</select>
 
 				<!-- Post tags -->
-				<select data-param="post_tags" name="post_tags" class="multiple" multiple="multiple">
+				<select data-param="post_tags" name="post_tags[]" class="multiple" multiple="multiple">
 					<option value="0"><?php _e("Don't filter tags", "LayerSlider") ?></option>
 					<?php foreach ($postTags as $item): ?>
 					<?php if(isset($slider['properties']['post_tags']) && in_array($item->term_id, $slider['properties']['post_tags'])) : ?>
@@ -90,7 +96,7 @@ $posts = LS_Posts::find($queryArgs)->getParsedObject();
 				<?php else : ?>
 				<?php $postTaxTerms = array(); ?>
 				<?php endif ?>
-				<select data-param="post_tax_terms" name="post_tax_terms" class="multiple" multiple="multiple">
+				<select data-param="post_tax_terms" name="post_tax_terms[]" class="multiple" multiple="multiple">
 					<?php foreach ($postTaxTerms as $item): ?>
 					<?php if(isset($slider['properties']['post_tax_terms']) && in_array($item->term_id, $slider['properties']['post_tax_terms'])) : ?>
 					<option value="<?php echo $item->term_id ?>" selected="selected"><?php echo $item->name ?></option>

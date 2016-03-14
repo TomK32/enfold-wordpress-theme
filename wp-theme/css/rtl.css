@@ -179,7 +179,3 @@ left: 0;
 .rtl .aviaccordion-preview {
 left: 0!important;
 }
-
-.rtl .post-meta-infos time {
-    float: right;
-}

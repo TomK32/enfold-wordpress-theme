@@ -35,7 +35,7 @@ global $avia_config, $post;
 	 $last_el  = !empty(ShortcodeHelper::$tree)   ? end(ShortcodeHelper::$tree) : false;
 	 if(!$first_el || !in_array($first_el['tag'], AviaBuilder::$full_el ) )
 	 {
-        echo avia_new_section(array('close'=>false,'main_container'=>true, 'class'=>'main_color container_wrap_first'));
+        echo avia_new_section(array('close'=>false,'main_container'=>true));
 	 }
 	
 	$content = apply_filters('the_content', $content);

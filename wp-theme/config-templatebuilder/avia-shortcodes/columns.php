@@ -93,7 +93,6 @@ if ( !class_exists( 'avia_sc_columns' ) )
 				$output .= "<span class='avia-col-size'>".$size[$name]."</span>";
 				$output .= "<a class='avia-bigger avia-change-col-size'  href='#bigger' title='".__('Increase Column Size','avia_framework' )."'>+</a>";
 				$output .= "<a class='avia-delete'  href='#delete' title='".__('Delete Column','avia_framework' )."'>x</a>";
-				$output .= "<a class='avia-save-element'  href='#save-element' title='".__('Save Element as Template','avia_framework' )."'>+</a>";
 			    //$output .= "<a class='avia-new-target'  href='#new-target' title='".__('Move Element','avia_framework' )."'>+</a>";
 				$output .= "<a class='avia-clone'  href='#clone' title='".__('Clone Column','avia_framework' )."' >".__('Clone Column','avia_framework' )."</a>";
 				if(!empty($this->config['popup_editor']))
@@ -391,50 +390,6 @@ array(
 							'nodescription' => true
 				),
 					
-				
-				array(
-							"type" 	=> "tab",
-							"name"	=> __("Animation" , 'avia_framework' ),
-							'nodescription' => true
-						),
-						
-				array(
-						"name" 	=> __("Animation",'avia_framework' ),
-							"desc" 	=> __("Set an animation for this element. The animation will be shown once the element appears first on screen. Animations only work in modern browsers and only on desktop computers to keep page rendering as fast as possible.",'avia_framework' ),
-						"id" 	=> "animation",
-						"type" 	=> "select",
-						"std" 	=> "",
-						"subtype" => array(
-							__('None',  'avia_framework' ) =>'',
-							
-							__('Fade Animations',  'avia_framework') => array(
-								__('Fade in',  'avia_framework' ) =>'fade-in',
-								__('Pop up',  'avia_framework' ) =>'pop-up',
-							),
-							__('Slide Animations',  'avia_framework') => array(
-								__('Top to Bottom',  'avia_framework' ) =>'top-to-bottom',
-								__('Bottom to Top',  'avia_framework' ) =>'bottom-to-top',
-								__('Left to Right',  'avia_framework' ) =>'left-to-right',
-								__('Right to Left',  'avia_framework' ) =>'right-to-left',
-								),
-							__('Rotate',  'avia_framework') => array(
-								__('Full rotation',  'avia_framework' ) =>'av-rotateIn',
-								__('Bottom left rotation',  'avia_framework' ) =>'av-rotateInUpLeft',
-								__('Bottom right rotation',  'avia_framework' ) =>'av-rotateInUpRight',
-								)	
-								
-								
-								
-							)
-				  ),		
-				
-				
-				
-				array(
-							"type" 	=> "close_div",
-							'nodescription' => true
-				),
-				
 					
 				array(
 							"type" 	=> "close_div",
@@ -487,7 +442,6 @@ array(
 					'custom_margin'			=> '',
 					'min_height'			=> '',
 					'vertical_alignment'	=> 'av-align-top',
-					'animation'				=> ''
 					
 				
 				), $atts, $this->config['shortcode']);
@@ -504,9 +458,6 @@ array(
 				$inner_style = "";
 				$margin_style= "";
 				$output		 = "";
-				$anim_class  = empty($atts['animation']) ? "" : " av-animated-generic ".$atts['animation']." ";
-				$extraClass .= $anim_class;
-				
 			
 				if(!empty($atts['attachment']))
 				{

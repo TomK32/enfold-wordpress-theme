@@ -685,42 +685,6 @@ if(!function_exists('avia_ajax_delete_dynamic_element'))
 
 
 
-if(!function_exists('avia_ajax_verify_input'))
-{
-	function avia_ajax_verify_input()
-	{
-		//check if user is allowed to save and if its his intention with a nonce check
-		if(function_exists('check_ajax_referer')) { check_ajax_referer('avia_nonce_save_backend'); }
-		
-		$result = "";
-		$callback = "";
-				
-		global $avia;
-		foreach($avia->option_page_data as $option)
-		{
-			if(isset($option['id']) && $option['id'] == $_POST['key'] && isset($option['ajax']))
-			{
-				$callback = $option['ajax'];
-			}
-		}
-		
-		if(function_exists($callback))
-		{
-			$result = $callback( $_POST['value'] );
-		}
-		
-		die($result);
-	}
-	
-	//hook into wordpress admin.php
-	add_action('wp_ajax_avia_ajax_verify_input', 'avia_ajax_verify_input');
-}
-
-
-
-
-
-
 
 /**
  * This function imports the config file

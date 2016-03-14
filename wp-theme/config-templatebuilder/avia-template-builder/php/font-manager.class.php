@@ -449,7 +449,7 @@ class avia_font_manager{
 	 * @return string $output
 	 */
 	 
-	static function load_font()
+	static function load_font($element)
 	{
 		$font_configs 	= self::load_iconfont_list();
 

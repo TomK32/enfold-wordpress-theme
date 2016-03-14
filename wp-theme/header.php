@@ -6,8 +6,6 @@
 	$blank 		= isset($avia_config['template']) ? $avia_config['template'] : "";	
 	$av_lightbox= avia_get_option('lightbox_active') != "disabled" ? 'av-default-lightbox' : 'av-custom-lightbox';
 	$preloader	= avia_get_option('preloader') == "preloader" ? 'av-preloader-active av-preloader-enabled' : 'av-preloader-disabled';
-	$sidebar_styling = avia_get_option('sidebar_styling');
-
 
 	
 ?><!DOCTYPE html>
@@ -57,7 +55,7 @@ wp_head();
 
 
 
-<body id="top" <?php body_class($style." ".$avia_config['font_stack']." ".$blank." ".$sidebar_styling); avia_markup_helper(array('context' => 'body')); ?>>
+<body id="top" <?php body_class($style." ".$avia_config['font_stack']." ".$blank); avia_markup_helper(array('context' => 'body')); ?>>
 
 	<?php 
 		
@@ -80,9 +78,4 @@ wp_head();
 		
 	<div id='main' data-scroll-offset='<?php echo avia_header_setting('header_scroll_offset'); ?>'>
 
-	<?php 
-		
-		if(isset($avia_config['temp_logo_container'])) echo $avia_config['temp_logo_container'];
-		do_action('ava_after_main_container'); 
-		
-	?>
+	<?php do_action('ava_after_main_container'); ?>

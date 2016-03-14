@@ -170,7 +170,7 @@ function avia_nl2br (str, is_xhtml)
 			});
 			
 			//remove element from canvas
-			this.canvas.on('click', 'a.avia-delete:not(.av-no-drag-drop a)', function()
+			this.canvas.on('click', 'a.avia-delete', function()
 			{
 				obj.shortcodes.deleteItem(this, obj);
 				return false;
@@ -178,7 +178,7 @@ function avia_nl2br (str, is_xhtml)
 			
 			
 			//change size of column element
-			this.canvas.on('click', 'a.avia-change-col-size:not(.avia-change-cell-size, .av-no-drag-drop a)', function()
+			this.canvas.on('click', 'a.avia-change-col-size:not(.avia-change-cell-size)', function()
 			{
 				obj.shortcodes.changeSize(this, obj);
 				return false;
@@ -186,14 +186,14 @@ function avia_nl2br (str, is_xhtml)
 
 			
 			// add new cell for layout row
-			this.canvas.on('click', 'a.avia-add-cell:not( .av-no-drag-drop a )', function()
+			this.canvas.on('click', 'a.avia-add-cell', function()
 			{
 				obj.shortcodes.addCell(this, obj);
 				return false;
 			});
 			
 			// add new cell for layout row
-			this.canvas.on('click', 'a.avia-set-cell-size:not( .av-no-drag-drop a )', function()
+			this.canvas.on('click', 'a.avia-set-cell-size', function()
 			{
 				obj.shortcodes.setCellSize(this, obj);
 				return false;
@@ -253,7 +253,7 @@ function avia_nl2br (str, is_xhtml)
 			
 
 			//copy item
-			this.canvas.on('click', 'a.avia-clone:not( .av-no-drag-drop a )', function()
+			this.canvas.on('click', 'a.avia-clone', function()
 			{
 				obj.cloneElement(this, obj);
 				return false;
@@ -316,7 +316,7 @@ function avia_nl2br (str, is_xhtml)
 				params 	= 
 				{ 
 					appendTo: "body",
-					handle: '>.menu-item-handle:not( .av-no-drag-drop .menu-item-handle )',
+					handle: '>.menu-item-handle',
 					helper: "clone",
 					scroll: true,
 					zIndex: 20000, /*must be bigger than fullscreen overlay in fixed pos*/
@@ -872,10 +872,10 @@ function avia_nl2br (str, is_xhtml)
 		
 			if(typeof text == "undefined")
 			{
-				text = this.secureContent.val(); //entity-test: val() to html()
+				text = this.secureContent.val(); //testdrive: val() to html()
 				if(text.indexOf('[') === -1)
 				{
-                	text = this.classic_textarea.val(); //entity-test: val() to html()
+                	text = this.classic_textarea.val(); //testdrive: val() to html()
                 	if(this.tiny_active) text = window.switchEditors._wp_Nop(text);
                 	this.secureContent.val(text);
 				}
@@ -1162,8 +1162,6 @@ function avia_nl2br (str, is_xhtml)
 		
 		update_builder_html: function(element_container, values, force_content_close)
 		{	
-			
-			
 			var output = "",
 				key, 
 				subkey,
@@ -1307,6 +1305,7 @@ function avia_nl2br (str, is_xhtml)
 		*/
 		createShortcode: function(values, shortcode, tag, force_content_close)
 		{
+			
 			var key, output = "", attr = "", content = "", i, array_seperator = ",", line_break = "\n";
 			if(!tag) tag = {};
 			
@@ -1344,7 +1343,7 @@ function avia_nl2br (str, is_xhtml)
 				{
 					if(isNaN(key)) /*if the key is an integer like zero we probably need to deal with the "first" value from columns or cells. in that case dont add the key, only the value*/
 					{
-						if(typeof values[key] === 'object' && values[key] !== null) values[key] = values[key].join(',');
+						if(typeof values[key] === 'object') values[key] = values[key].join(',');
 			        	attr += key + "='" + values[key] + "' ";
 					}
 					else

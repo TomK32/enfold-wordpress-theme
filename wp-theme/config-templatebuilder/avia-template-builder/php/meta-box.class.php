@@ -208,11 +208,11 @@ if ( !class_exists( 'MetaBoxBuilder' ) ) {
 				{
 					if(empty($_POST[$box['id']])) $_POST[$box['id']] = 0;
 				}
-				
+	
 				foreach($_POST as $key=>$value)
 				{
-					if($key === $box['id'])
-					{		
+					if(strpos($key, $box['id']) !== false)
+					{							
 						update_post_meta($id , $key, $_POST[$key]);					
 					}
 				}

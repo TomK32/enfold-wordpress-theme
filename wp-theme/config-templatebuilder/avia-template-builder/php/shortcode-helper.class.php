@@ -360,9 +360,7 @@ self::build_pattern();
 			{
 				
 				//strip slashes and trim the content
-				$content = "\n".trim(stripslashes($content)) ."\n"; 
-				
-				// $content = htmlentities( $content , ENT_QUOTES, get_bloginfo( 'charset' ) ); //entity-test: added htmlentities
+				$content = "\n".trim(stripslashes($content)) ."\n"; //testdrive: added htmlentities
 				
 				//if the content is empty without tabs and line breaks remove it completly
 				if(trim($content) == "") $content = "";

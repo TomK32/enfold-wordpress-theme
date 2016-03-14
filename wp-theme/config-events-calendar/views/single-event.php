@@ -21,16 +21,7 @@ $event_id = get_the_ID();
 	<p class="tribe-events-back"><a href="<?php echo tribe_get_events_link() ?>"> <?php _e( '&laquo; All Events', 'avia_framework' ) ?></a></p>
 
 	<!-- Notices -->
-	<?php 
-		if(function_exists('tribe_the_notices') )
-		{
-			tribe_the_notices();
-		}
-		else
-		{
-			tribe_events_the_notices();
-		}
-		?>
+	<?php tribe_events_the_notices() ?>
 
 
 	<?php while ( have_posts() ) :  the_post(); ?>
@@ -57,7 +48,7 @@ $event_id = get_the_ID();
 				</div><!-- .tribe-events-single-event-description -->
 				<?php do_action( 'tribe_events_single_event_after_the_content' ) ?>
 	
-				<?php if( get_post_type() == Tribe__Events__Main::POSTTYPE && tribe_get_option( 'showComments', false ) ) comments_template() ?>
+				<?php if( get_post_type() == TribeEvents::POSTTYPE && tribe_get_option( 'showComments', false ) ) comments_template() ?>
 			
 			</div> <!-- av-single-event-content -->
 			

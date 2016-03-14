@@ -735,7 +735,7 @@ if(!function_exists('avia_pagination'))
 	*/
 	function avia_pagination($pages = '', $wrapper = 'div')
 	{
-		global $paged, $wp_query;
+		global $paged;
 
 		if(get_query_var('paged')) {
 		     $paged = get_query_var('paged');
@@ -751,26 +751,19 @@ if(!function_exists('avia_pagination'))
 		$range = 2; // only edit this if you want to show more page-links
 		$showitems = ($range * 2)+1;
 
-		
 
-		if($pages == '') //if the default pages are used
+
+		if($pages == '')
 		{
+			global $wp_query;
 			//$pages = ceil(wp_count_posts($post_type)->publish / $per_page);
 			$pages = $wp_query->max_num_pages;
 			if(!$pages)
 			{
 				$pages = 1;
 			}
-	
-			//factor in pagination
-			if( isset($wp_query->query) && !empty($wp_query->query['offset']) && $pages > 1 )
-			{
-				$offset_origin = $wp_query->query['offset'] - ($wp_query->query['posts_per_page'] * ( $paged - 1 ) );
-				$real_posts = $wp_query->found_posts - $offset_origin;
-				$pages = ceil( $real_posts / $wp_query->query['posts_per_page']);
-			}
 		}
-		
+
 		$method = "get_pagenum_link";
 		if(is_single())
 		{
@@ -994,7 +987,6 @@ if(!function_exists('avia_default_colors'))
 		{
 			$prefix 		= "avia_";
 			$option			= $prefix."theme_color";
-			$fallback		= $option."_fallback";
 			$default_color	= $prefix."default_wordpress_color_option";
 			$colorstamp 	= get_option($option);
 			$today			= strtotime('now');

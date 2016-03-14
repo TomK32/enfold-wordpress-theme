@@ -116,7 +116,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 					{
 						if(!empty($element['type']) && $element['type'] != 'checkbox')
 						{
-							$output .= "<div>".$element['desc']."</div>";
+							$output .= "<span>".$element['desc']."</span>";
 						}
 						else
 						{
@@ -126,11 +126,8 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 					
 					$output .= "</div>";
 				}
-			
 				$output .= "<div class='avia-form-element ".$element['class']."'>";
-				//$output .= self::{$element['type']}($element, $parent_class);
-				
-				$output .= call_user_func(array('self', $element['type']), $element, $parent_class);
+				$output .= self::$element['type']($element, $parent_class);
 				
 				if(!empty($element['fetchTMPL']))
 				{
@@ -145,8 +142,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			}
 			else
 			{
-				//$output .= self::{$element['type']}($element, $parent_class);
-				$output .= call_user_func(array('self', $element['type']), $element, $parent_class);
+				$output .= self::$element['type']($element, $parent_class);
 			}
 			
 			if( $element['builder_active'] )
@@ -232,10 +228,9 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		static function modal_group($element, $parent_class)
 		{
 			$iterations = count($element['std']);
-			$class = isset($element['class']) ? $element['class'] : "";
 			
 			$output = "";
-			$output .= "<div class='avia-modal-group-wrapper {$class}' >";
+			$output .= "<div class='avia-modal-group-wrapper' >";
 			
 			if(!empty($element['creator'])) $output .= self::render_element($element['creator']);
 			
@@ -256,11 +251,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			$label_class = isset($element['add_label']) ? "avia-custom-label" : "";
 			
 			$output .= "</div>";
-			
-			if(!isset($element['disable_manual']))
-			{
-				$output .= "<a class='avia-attach-modal-element-add avia-add {$label_class}'>".$label."</a>";
-			}
+			$output .= "<a class='avia-attach-modal-element-add avia-add {$label_class}'>".$label."</a>";
 			
 			//go the new wordpress way and instead of ajax-loading new items, prepare an empty js template
 			$output .= '	<script type="text/html" class="avia-tmpl-modal-element">';
@@ -412,29 +403,16 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		{	
 			//array('option' => 'header_position', 'compare' => "equal_or_empty", "value"=>"header_top")
 			
-			if(isset( $element['condition']['option'] ))
-			{
-				$option = avia_get_option($element['condition']['option']);
-			}
-			else
-			{
-				$key = $element['condition']['element'];
-				$option = isset($element['shortcode_data'][$key]) ? $element['shortcode_data'][$key] : "";
-			}
-			
+			$option 	= avia_get_option($element['condition']['option']);
 			$value  	= $element['condition']['value'];
-			
 			$result 	= false;
 			$class		= "av_option_hidden";
 			$overlay	= "<div class='av_conditional_overlay_content'>".$element['notice']."</div>";
 			switch($element['condition']['compare'])
 			{
-				case "equals" : if($option === $value) $result = true; break;
-				case "equal_or_empty" : if($option === $value || $option == "") $result = true; break;
-				case "contains" : if(strpos($option, $value) === false) $result = true; break;
-				case "not" : if($option !== $value) $result = true; break;
+				case "equals" : if($option === $value) $result = true;
+				case "equal_or_empty" : if($option === $value || $option == "") $result = true;
 			}
-			
 			
 			if($result) 
 			{	
@@ -878,9 +856,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			{
 				$output .= self::display_image($url);			
 			}
-			
-			//$output .= self::$element['data']['save_to']($element);
-			$output .= call_user_func(array('self', $element['data']['save_to']), $element);
+			$output .= self::$element['data']['save_to']($element);
 			
 			//fake img for multi_image element
 			if(isset($fetch))
@@ -1020,7 +996,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				
 		        foreach($entries as $key => $entry)
 		        {
-			    	if( !empty($entry->parent) )
+			    	if($entry->parent)
 			    	{
 				    	$parents[$entry->parent][$entry->term_id] = $entry;
 				    	unset($entries[$key]);
@@ -1286,72 +1262,9 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		
 		
 		
-		static function mailchimp_list( $element )
-		{
-			$api 		= $element['api'];
-			$new_list 	= array();
-			
-			foreach( $api->fields as $list_id => $fields)
-			{
-				foreach($fields as $field)
-				{
-					$list_item = array();
-					$list_item['id'] 		= $field->merge_id;
-					$list_item['label'] 	= $field->name;
-					$list_item['type'] 		= $field->type;
-					$list_item['value'] 	= $field->default_value;
-					$list_item['disabled'] 	= empty($field->show) ? "true" : "";
-					$list_item['check'] 	= "";
-								
-					
-					if($field->required == 1)
-					{
-						$list_item['check'] = "is_empty";
-						if($field->type == 'email')  { $list_item['check'] = "is_email"; $list_item['type'] = "text";}
-						if($field->type == 'number')  $list_item['check'] = "is_number";
-					}
-					
-					if(isset( $field->options ))
-					{
-						$list_item['options'] = implode(",", $field->options->choices );
-					}						
-					
-					$new_list[$list_id][$field->merge_id] = $list_item;
-				}
-				
-				//add the default subscribe button
-				if(!empty($new_list[$list_id]))
-				{
-					$new_list[$list_id]['av-button'] = array(
-						'id' 		=> "av-button",
-						'label' 	=> __( "Subscribe" , "avia_framework" ),
-						'type'		=> "button",
-						'value' 	=> "",
-						'check' 	=> "",
-					);
-				}
-				
-			}
-			
-			$output  = "";
-			$output  .= self::select( $element );	
-			$output  .= "<script type='text/javascript' > var av_mailchimp_list = ".json_encode($new_list)."; ";
-			$output  .= "</script>";
-			
-			return $output;
-		}
-		
-		
-		
-		
-		
-		
-		
-		
 		static function table ( $element , $parent)
 		{
 			$values = !empty($_POST['extracted_shortcode']) ? $_POST['extracted_shortcode'] : false;
-			
 			$prepared = array();
 			$rows = $columns = 3;
 			

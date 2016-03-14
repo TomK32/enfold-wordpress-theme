@@ -155,7 +155,7 @@ border-color: #e1e1e1; color: #444; border-radius: 0; -moz-border-radius: 0; -we
 
 /*checkbox*/
 .avia-element-checkbox{position: relative;}
-.avia-element-checkbox .avia-name-description > div, .avia-name-description > label{ padding-left:20px;}
+.avia-element-checkbox .avia-name-description > span, .avia-name-description > label{ padding-left:20px;}
 .avia-element-checkbox .avia-form-element{position: absolute;top:37px;}
 
 
@@ -365,13 +365,9 @@ border-bottom:none;
 */
 
 .avia-name-description > strong{ display:block; }
-.avia-name-description > div, .avia-name-description > label{ display: block; margin-bottom: 4px; color: #777;}
+.avia-name-description > span, .avia-name-description > label{ display: block; margin-bottom: 4px; color: #777;}
 
-.avia-name-description > div > ul li{
-	list-style-type: disc;
-	list-style-position: outside;
-	margin-left: 20px;
-}
+
 
 
 
@@ -448,15 +444,6 @@ border:none;
 .avia-form-element-container.avia-element-heading{
 border-bottom:none;
 }
-
-
-/*mailchimp*/
-.av-mailchimp-btn-label, .avia-id-av-button .av-mailchimp-el-label{ display:none; }
-.avia-id-av-button .av-mailchimp-btn-label{display: inline;}
-.av-required-indicator{color:#2EA2CC;}
-.avia-check- .av-required-indicator{display: none;}
-
-
 
 
 /*multi input*/

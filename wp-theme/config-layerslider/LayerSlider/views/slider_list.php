@@ -44,12 +44,11 @@
 
 	// Auto-updates
 	$code = get_option('layerslider-purchase-code', '');
-	$codeFormatted = '';
 	if(!empty($code)) {
 		$start = substr($code, 0, -6);
 		$end = substr($code, -6);
-		$codeFormatted = preg_replace("/[a-zA-Z0-9]/", '●', $start) . $end;
-		$codeFormatted = str_replace('-', ' ', $codeFormatted);
+		$code = preg_replace("/[a-zA-Z0-9]/", '●', $start) . $end;
+		$code = str_replace('-', ' ', $code);
 	}
 
 	$validity = get_option('layerslider-authorized-site', '0');
@@ -96,7 +95,7 @@
 		</form>
 	</div>
 	<div id="screen-options-link-wrap" class="hide-if-no-js screen-meta-toggle">
-		<button type="button" id="show-settings-link" class="button show-settings" aria-controls="screen-options-wrap" aria-expanded="false"><?php _e('Screen Options', 'LayerSlider') ?></button>
+		<a href="#screen-options-wrap" id="show-settings-link" class="show-settings"><?php _e('Screen Options', 'LayerSlider') ?></a>
 	</div>
 </div>
 
@@ -121,23 +120,142 @@
 	</h2>
 
 	<!-- Version number -->
-	<?php include LS_ROOT_PATH . '/templates/tmpl-beta-feedback.php'; ?>
+	<?php if(strpos(LS_PLUGIN_VERSION, 'b') !== false) : ?>
+	<div class="ls-version-number">
+		<?php _e('Using beta version', 'LayerSlider') ?> (<?php echo LS_PLUGIN_VERSION ?>)
+		<a href="mailto:support@kreaturamedia.com?subject=LayerSlider WP Beta Feedback"><?php _e('Send feedback', 'LayerSlider') ?></a>
+	</div>
+	<?php endif; ?>
+	<!-- End of version number -->
 
 	<!-- Add slider template -->
-	<?php include LS_ROOT_PATH . '/templates/tmpl-add-slider.php'; ?>
+	<form action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="post" id="ls-add-slider-template" class="ls-pointer ls-box">
+		<?php wp_nonce_field('add-slider'); ?>
+		<input type="hidden" name="ls-add-new-slider" value="1">
+		<span class="ls-mce-arrow"></span>
+		<h3 class="header"><?php _e('Name your new slider', 'LayerSlider') ?></h3>
+		<div class="inner">
+			<input type="text" name="title" placeholder="<?php _e('e.g. Homepage slider', 'LayerSlider') ?>">
+			<button class="button"><?php _e('Add slider', 'LayerSlider') ?></button>
+		</div>
+	</form>
+	<!-- End of Add slider template -->
 
 
 	<!-- Import sample sliders template -->
-	<?php include LS_ROOT_PATH . '/templates/tmpl-demo-sliders.php'; ?>
+	<?php $demoSliders = LS_Sources::getDemoSliders(); ?>
+	<div id="ls-import-samples-template" class="ls-pointer ls-box">
+		<span class="ls-mce-arrow"></span>
+		<h3 class="header"><?php _e('Choose a demo slider to import', 'LayerSlider') ?></h3>
+		<ul class="inner">
+			<?php foreach($demoSliders as $item) : ?>
+			<li>
+				<a href="<?php echo wp_nonce_url('?page=layerslider&action=import_sample&slider='.$item['handle'].'', 'import-sample-sliders') ?>">
+					<div class="preview"><img src="<?php echo $item['preview'] ?>"></div>
+					<div class="title"><?php echo $item['name'] ?></div>
+				</a>
+			</li>
+			<?php endforeach ?>
+		</ul>
+		<ul class="inner sep">
+			<li>
+				<a href="<?php echo wp_nonce_url('?page=layerslider&action=import_sample&slider=all', 'import-sample-sliders') ?>">
+					<?php _e('Import all demo sliders (might be slow)', 'LayerSlider') ?>
+				</a>
+			</li>
+		</ul>
+		<div class="inner">
+			<?php _e('More demo content can be found in the downloaded package from CodeCanyon. You can import them in the usual way in the "Import and Export Sliders" section below.', 'LayerSlider') ?>
+		</div>
+	</div>
+	<!-- End of Import sample sliders template -->
 
 
 	<!-- Share sheet template -->
-	<?php include LS_ROOT_PATH . '/templates/tmpl-share-sheet.php'; ?>
+	<?php
+		$time = time();
+		$installed = get_option('ls-date-installed', 0);
+		$level = get_option('ls-share-displayed', 1);
+
+		switch($level){
+			case 1:
+				$time = $time-60*60*24*14;
+				$odds = 100;
+				break;
+
+			case 2:
+				$time = $time-60*60*24*30*2;
+				$odds = 200;
+				break;
+
+			case 3:
+				$time = $time-60*60*24*30*6;
+				$odds = 300;
+				break;
+
+			default:
+				$time = $time-60*60*24*30*6;
+				$odds = 1000;
+				break;
+		}
+
+		if($installed && $time > $installed) {
+			if(mt_rand(1, $odds) == 3) {
+				update_option('ls-share-displayed', ++$level);
+	?>
+	<div class="ls-overlay" data-manualclose="true"></div>
+	<link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+	<div id="ls-share-template" class="ls-modal ls-box">
+		<h3>
+			<?php _e('Enjoy using LayerSlider?', 'LayerSlider') ?>
+			<a href="#" class="dashicons dashicons-no-alt"></a>
+		</h3>
+		<div class="inner desc">
+			<?php _e("If so, please consider recommending it to your friends on your favorite social network!", "LayerSlider"); ?>
+		</div>
+		<div class="inner">
+			<a href="https://www.facebook.com/sharer/sharer.php?u=http://kreaturamedia.com/layerslider-responsive-wordpress-slider-plugin/" target="_blank">
+				<i class="dashicons dashicons-facebook-alt"></i> <?php _e('Share', 'LayerSlider') ?>
+			</a>
+
+			<a href="http://www.twitter.com/share?url=http%3A%2F%2Fkreaturamedia.com%2Flayerslider-responsive-wordpress-slider-plugin%2F&amp;text=Check%20out%20LayerSlider%20WP%2C%20an%20awesome%20%23slider%20%23plugin%20for%20%23WordPress&amp;via=kreaturamedia" target="_blank">
+				<i class="dashicons dashicons-twitter"></i> <?php _e('Tweet', 'LayerSlider') ?>
+			</a>
+
+			<a href="https://plus.google.com/share?url=http://kreaturamedia.com/layerslider-responsive-wordpress-slider-plugin/" target="_blank">
+				<i class="dashicons dashicons-googleplus"></i> +1
+			</a>
+		</div>
+	</div>
+	<?php } } ?>
+	<!-- End of Share sheet template -->
 
 
 	<!-- Auto-update revalidation -->
-	<?php include LS_ROOT_PATH . '/templates/tmpl-updates-revalidation.php'; ?>
-
+	<?php if(
+		get_option('layerslider-validated', null) === '1' &&
+		get_option('layerslider-authorized-site', null) === null &&
+		get_option('ls-show-revalidation-notice', 1)
+	) : ?>
+	<div class="ls-overlay" data-manualclose="true"></div>
+	<div id="ls-autoupdate-popup" class="ls-box">
+		<h3 class="header">Auto-update revalidation required</h3>
+		<div class="inner">
+			<h4>What's changed?</h4>
+			<p>Due to changes in our auto-update solution you need to re-validate the plugin to receive automatic updates again. From now on a purchase code can be used to enable automatic updates on 2 websites only. The domain name of your site will be recorded on re-activation.</p>
+			<h4>What do I have to do?</h4>
+			<p>Since you've already entered your purchase code you just need to click on the "Update" button in the auto-update box. Please keep in mind that now you can only activate 2 websites with a key at the same time.</p>
+			<h4>Why is it necessary?</h4>
+			<p>Item purchase codes have many applications besides the auto-update feature. We feel it's important to minimize the impact of leaked/shared codes on the web in order to improve user experience and our products and support services.</p>
+			<h4>Should I be worried?</h4>
+			<p>The plugin will remain functioning without any restriction, but you need to re-validate your purchase to receive updates again. If you've got LayerSlider by a theme purchase you can receive the latest versions with theme updates, unless you purchase a license directly for LayerSlider on <a href="http://codecanyon.net/item/layerslider-responsive-wordpress-slider-plugin-/1362246" target="_blank">CodeCanyon</a>.</p>
+			<p>For more details about licensing, please read our <a href="http://support.kreaturamedia.com/faq/4/layerslider-for-wordpress/#group-3" target="_blank">FAQ entries</a> or check the relevant <a href="http://codecanyon.net/licenses/standard" target="_blank">marketplace pages<a>.</p>
+			<p class="signature">Please accept our sincerest apologies for any inconvenience may caused. <br> Kreatura Media Team</p>
+			<a href="<?php echo wp_nonce_url('?page=layerslider&action=hide-revalidation-notice', 'hide-revalidation-notice') ?>" class="button button-primary">I understand</a>
+		</div>
+	</div>
+	<?php endif ?>
+	<!-- End of Auto-update revalidation template -->
 
 
 	<?php if(empty($sliders)) : ?>
@@ -268,7 +386,7 @@
 
 				<div class="inner">
 					<?php _e('Enter your purchase code', 'LayerSlider') ?>
-					<input type="text" name="purchase_code" value="<?php echo $codeFormatted ?>"  class="key" placeholder="e.g. bc8e2b24-3f8c-4b21-8b4b-90d57a38e3c7" data-help="<?php _e('To receive automatic updates, you need to enter your item purchase code. Click on the Download button next to LayerSlider WP on your CodeCanyon downloads page and choose the &quot;License certificate & purchase code&quot; option. This will download a text file that contains your purchase code.', 'LayerSlider') ?>">
+					<input type="text" name="purchase_code" value="<?php echo $code ?>"  class="key" placeholder="e.g. bc8e2b24-3f8c-4b21-8b4b-90d57a38e3c7" data-help="<?php _e('To receive automatic updates, you need to enter your item purchase code. Click on the Download button next to LayerSlider WP on your CodeCanyon downloads page and choose the &quot;License certificate & purchase code&quot; option. This will download a text file that contains your purchase code.', 'LayerSlider') ?>">
 					<i><?php _e('and', 'LayerSlider') ?></i>
 					<?php _e('choose release channel', 'LayerSlider') ?>
 					<label><input type="radio" name="channel" value="stable" <?php echo ($channel === 'stable') ? 'checked="checked"' : ''?>> <?php _e('Stable', 'LayerSlider') ?></label>
@@ -290,7 +408,6 @@
 				<div class="footer">
 					<button class="button"><?php _e('Update', 'LayerSlider') ?></button>
 					<a href="#" class="ls-deauthorize<?php echo ($validity == '1') ? '' : ' ls-hidden' ?>"><?php _e('Deauthorize this site', 'LayerSlider') ?></a>
-					<a href="<?php echo LS_REPO_BASE_URL.'download?domain='.base64_encode($_SERVER['SERVER_NAME']).'&channel='.$channel.'&code='.base64_encode($code) ?>" class="<?php echo ($validity == '1') ? '' : ' ls-hidden' ?>"><?php _e('Download latest version manually', 'LayerSlider') ?></a>
 					<a href="update-core.php" class="<?php echo ($validity == '1') ? '' : 'ls-hidden' ?>"><?php _e('Check for updates', 'LayerSlider') ?></a>
 				</div>
 			</form>
@@ -497,14 +614,14 @@
 
 				<table>
 					<tr>
-						<td><?php _e('Use slider markup caching', 'LayerSlider') ?></td>
-						<td><input type="checkbox" name="use_cache" <?php echo get_option('ls_use_cache', true) ? 'checked="checked"' : '' ?>></td>
-						<td class="desc"><?php _e('Enabled caching can drastically increase the plugin performance and spare your server from unnecessary load.', 'LayerSlider') ?></td>
+						<td><?php _e('Use Google CDN version of jQuery', 'LayerSlider') ?></td>
+						<td><input type="checkbox" name="use_custom_jquery" <?php echo get_option('ls_use_custom_jquery', false) ? 'checked="checked"' : '' ?>></td>
+						<td class="desc"><?php _e('This option will likely solve "Old jQuery" issues.', 'LayerSlider') ?></td>
 					</tr>
 					<tr>
 						<td><?php _e("Include scripts in the footer", "LayerSlider") ?></td>
 						<td><input type="checkbox" name="include_at_footer" <?php echo get_option('ls_include_at_footer', false) ? 'checked="checked"' : '' ?>></td>
-						<td class="desc"><?php _e("Including resources in the footer can improve load times and solve other type of issues. Outdated themes might not support this method.", "LayerSlider") ?></td>
+						<td class="desc"><?php _e("Including resources in the footer could decrease load times, and solve other type of issues, but your theme might not support this method.", "LayerSlider") ?></td>
 					</tr>
 					<tr>
 						<td><?php _e("Conditional script loading", "LayerSlider") ?></td>
@@ -513,13 +630,8 @@
 					</tr>
 					<tr>
 						<td><?php _e('Concatenate output', 'LayerSlider') ?></td>
-						<td><input type="checkbox" name="concatenate_output" <?php echo get_option('ls_concatenate_output', false) ? 'checked="checked"' : '' ?>></td>
+						<td><input type="checkbox" name="concatenate_output" <?php echo get_option('ls_concatenate_output', true) ? 'checked="checked"' : '' ?>></td>
 						<td class="desc"><?php _e("Concatenating the plugin's output could solve issues caused by custom filters your theme might use.", "LayerSlider") ?></td>
-					</tr>
-					<tr>
-						<td><?php _e('Use Google CDN version of jQuery', 'LayerSlider') ?></td>
-						<td><input type="checkbox" name="use_custom_jquery" <?php echo get_option('ls_use_custom_jquery', false) ? 'checked="checked"' : '' ?>></td>
-						<td class="desc"><?php _e('This option will likely solve "Old jQuery" issues.', 'LayerSlider') ?></td>
 					</tr>
 					<tr>
 						<td><?php _e('Put JS includes to body', 'LayerSlider') ?></td>

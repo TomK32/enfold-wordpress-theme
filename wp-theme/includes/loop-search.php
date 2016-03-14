@@ -12,7 +12,8 @@ if (have_posts()) :
 	if($page > 1) $post_loop_count = ((int) ($page - 1) * (int) get_query_var('posts_per_page')) +1;
 	$blog_style = avia_get_option('blog_style','multi-big');
 
-	while ( have_posts() ) : the_post();
+
+	while (have_posts()) : the_post();
 
 
 	$the_id 		= get_the_ID();
@@ -56,9 +57,8 @@ if (have_posts()) :
 
                     $taxonomies  = get_object_taxonomies(get_post_type($the_id));
                     $cats = '';
-					$excluded_taxonomies = array_merge( get_taxonomies( array( 'public' => false ) ), array('post_tag','post_format') );
-					$excluded_taxonomies = apply_filters('avf_exclude_taxonomies', $excluded_taxonomies, get_post_type($the_id), $the_id);
-					
+                    $excluded_taxonomies =  apply_filters('avf_exclude_taxonomies', array('post_tag','post_format'), get_post_type($the_id), $the_id);
+
                     if(!empty($taxonomies))
                     {
                         foreach($taxonomies as $taxonomy)

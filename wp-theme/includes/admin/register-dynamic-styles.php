@@ -14,7 +14,7 @@ function avia_prepare_dynamic_styles($options = false)
 	
 	//transparency color for header menu
 	$avia_config['backend_colors']['menu_transparent'] = empty($options['header_replacement_menu']) ? "" : $options['header_replacement_menu']; 
-
+	
 	
 	//iterate over the options array to get the color and bg image options and save them to new array
 	foreach ($options as $key => $option)

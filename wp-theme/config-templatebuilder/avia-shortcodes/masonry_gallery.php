@@ -263,9 +263,7 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 				
 				if($atts['gap'] == 'no') $params['class'] .= " avia-no-border-styling";
 				
-				$custom_class = !empty($meta['custom_class']) ? $meta['custom_class'] : "";
-				$atts['container_class'] = "av-masonry-gallery {$custom_class} ";
-				
+				$atts['container_class'] = "av-masonry-gallery";
 				$masonry  = new avia_masonry($atts);
 				$masonry->query_entries_by_id();
 				$masonry_html = $masonry->html();

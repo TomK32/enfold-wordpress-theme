@@ -267,7 +267,7 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 
 
 			//if we got elements for the popup editor activate it
-			if(method_exists($this, 'popup_elements') && is_admin())
+			if(method_exists($this, 'popup_elements'))
 			{
 				$this->popup_elements();
 
@@ -327,7 +327,7 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 			{
 				switch($element['type'])
 				{
-					case "mailchimp_list":  $this->config['modal_on_load'][] = 'modal_load_mailchimp'; break;
+				
 					case "multi_input": 	$this->config['modal_on_load'][] = 'modal_load_multi_input'; break;
 					case "tab_container": 	$this->config['modal_on_load'][] = 'modal_load_tabs'; break;
 					case "tiny_mce": 		$this->config['modal_on_load'][] = 'modal_load_tiny_mce'; break;
@@ -340,11 +340,6 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 											$this->config['modal_on_load'][] = 'modal_hotspot_helper';
 											$this->extra_config_element_iterator($element['subelements']);
 					break;
-				}
-				
-				if(!empty($element['modal_on_load'])) //manually load a script
-				{
-					$this->config['modal_on_load'][] = $element['modal_on_load'];
 				}
 			}
 		}
@@ -506,7 +501,7 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 				$output .= "<a class='$extraClass'  href='#edit-element' title='".__('Edit Element','avia_framework' )."'>edit</a>";
 			}
 
-			$output .= "<a class='avia-save-element'  href='#save-element' title='".__('Save Element as Template','avia_framework' )."'>+</a>";
+			//$output .= "<a class='avia-new-target'  href='#new-target' title='".__('Move Element','avia_framework' )."'>+</a>";
 			$output .= "<a class='avia-delete'  href='#delete' title='".__('Delete Element','avia_framework' )."'>x</a>";
 			$output .= "<a class='avia-clone'  href='#clone' title='".__('Clone Element','avia_framework' )."' >".__('Clone Element','avia_framework' )."</a></div>";
 

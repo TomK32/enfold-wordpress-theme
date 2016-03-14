@@ -5,7 +5,7 @@
  * Element is in Beta and by default disabled. Todo: test with layerslider elements. currently throws error bc layerslider is only included if layerslider element is detected which is not the case with the post/page element
  */
 
-if( !class_exists( 'Tribe__Events__Main' ) )
+if( !class_exists( 'TribeEvents' ) )
 {
 	function av_upcoming_events_fallback()
 	{
@@ -54,7 +54,7 @@ if ( !class_exists( 'avia_sc_upcoming_events' ) )
 						"desc" 	=> __("Select which entries should be displayed by selecting a taxonomy", 'avia_framework' ),
 						"id" 	=> "categories",
 						"type" 	=> "select",
-						"taxonomy" => Tribe__Events__Main::TAXONOMY,
+						"taxonomy" => TribeEvents::TAXONOMY,
 					    "subtype" => "cat",
 						"multiple"	=> 6
 				),
@@ -119,12 +119,6 @@ if ( !class_exists( 'avia_sc_upcoming_events' ) )
 			$posts 	= $this->query_entries( $atts );
 			$entries= $posts->posts;
 			
-			if(class_exists('Tribe__Events__Pro__Main'))
-			{
-				$ecp = Tribe__Events__Pro__Main::instance();
-				$ecp->disable_recurring_info_tooltip();
-			}
-			
 			if (!empty($entries))
 			{	global $post;
 				
@@ -134,7 +128,7 @@ if ( !class_exists( 'avia_sc_upcoming_events' ) )
 				{	
 					$class  = "av-upcoming-event-entry";
 					$image  = get_the_post_thumbnail($entry->ID, 'square', array( 'class' => 'av-upcoming-event-image' ));
-					$class .= !empty($image) ? " av-upcoming-event-with-image" : " av-upcoming-event-without-image";
+					$class .= empty($image) ? " av-upcoming-event-with-image" : " av-upcoming-event-without-image";
 					$title  = get_the_title($entry->ID);
 					$link	= get_permalink($entry->ID);
 					
@@ -146,32 +140,28 @@ if ( !class_exists( 'avia_sc_upcoming_events' ) )
 					$output .= "<a href='{$link}' class='{$class}'>";
 					
 		if($image)  $output .= $image;
-					$output .= "<span class='av-upcoming-event-data'>";
+					$output .= "<div class='av-upcoming-event-data'>";
 						$output .= "<h4 title='av-upcoming-event-title'>{$title}</h4>";
-							$output .= "<span class='av-upcoming-event-meta'>";
+							$output .= "<div class='av-upcoming-event-meta'>";
 							$output .= "<span class='av-upcoming-event-schedule'>".tribe_events_event_schedule_details($entry)."</span>";
 				if($price)	$output .= "<span class='av-upcoming-event-cost'>{$price}</span>";
 	if( $price && $venue )	$output .= " - ";	
 				if($venue)	$output .= "<span class='av-upcoming-event-venue'>{$venue}</span>";
 							$output .= apply_filters('avf_upcoming_event_extra_data', "", $entry);
-							$output .= "</span>";
-						$output .= "</span>";
+							$output .= "</div>";
+						$output .= "</div>";
 					$output .= "</a>";
 				}
 				
 				if($atts['paginate'] == "yes" && $avia_pagination = avia_pagination($posts->max_num_pages, 'nav'))
 				{
-					$output .= "<div class='pagination-wrap pagination-".Tribe__Events__Main::POSTTYPE."'>{$avia_pagination}</div>";
+					$output .= "<div class='pagination-wrap pagination-".TribeEvents::POSTTYPE."'>{$avia_pagination}</div>";
 				}
 				
 				$output .= "</div>";
 			}
 			
-			if(class_exists('Tribe__Events__Pro__Main'))
-			{
-				// Re-enable recurring event info
-				$ecp->enable_recurring_info_tooltip();	
-			}
+			
 			
 			return $output;
 		}
@@ -196,7 +186,7 @@ if ( !class_exists( 'avia_sc_upcoming_events' ) )
 				$query = array(	'paged' 	=> $page,
 								'eventDisplay' => 'list',
 								'posts_per_page' => $params['items'],
-								'tax_query' => array( 	array( 	'taxonomy' 	=> Tribe__Events__Main::TAXONOMY,
+								'tax_query' => array( 	array( 	'taxonomy' 	=> TribeEvents::TAXONOMY,
 																'field' 	=> 'id',
 																'terms' 	=> $terms,
 																'operator' 	=> 'IN')));

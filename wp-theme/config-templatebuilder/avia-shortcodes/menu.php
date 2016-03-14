@@ -39,13 +39,7 @@ if ( !class_exists( 'avia_sc_submenu' ) )
 			function popup_elements()
 			{
 				global $avia_config;
-				
-				$menus = array();
-				if(!empty($_POST) && !empty($_POST['action']) && $_POST['action'] == "avia_ajax_av_submenu")
-				{
-					$menus = AviaHelper::list_menus();
-				}
-				
+			
 				$this->elements = array(
 					
 					array(	
@@ -67,7 +61,7 @@ if ( !class_exists( 'avia_sc_submenu' ) )
 							"type" 	=> "select",
 							"std" 	=> "",
 							"required" 	=> array('which_menu', 'not', 'custom'),
-							"subtype" =>  $menus		
+							"subtype" =>  AviaHelper::list_menus()		
 							),
 							
 					array(
@@ -343,7 +337,7 @@ if ( !class_exists( 'avia_sc_submenu' ) )
 	                
 	                $output .= "<li class='menu-item menu-item-top-level {$button_style} menu-item-top-level-".avia_sc_submenu::$custom_items."'>";
 	                $output .= "<a href='{$link}' {$blank}><span class='avia-bullet'></span>";
-	                $output .= "<span class='avia-menu-text'>".$title."</span>";
+	                $output .= "<span class='avia-menu-text'>".$title."</span></a>";
 	                //$output .= "<span class='avia-menu-fx'><span class='avia-arrow-wrap'><span class='avia-arrow'></span></span></span>";
 	                $output .= "</a>";
 	                $output .= "</li>";

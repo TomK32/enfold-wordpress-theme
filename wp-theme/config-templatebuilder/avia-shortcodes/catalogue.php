@@ -126,9 +126,7 @@ if ( !class_exists( 'avia_sc_catalogue' ) )
 
 				$params['innerHtml']  = "";
 				$params['innerHtml'] .= "<div class='avia_title_container'>";
-				$params['innerHtml'] .=	"<div ".$this->class_by_arguments('disabled' ,$params['args']).">";
 				$params['innerHtml'] .= "<span {$template} >".__("Item", 'avia_framework' ).": ".$params['args']['title']."</span></div>";
-				$params['innerHtml'] .= "</div>";
 
 				return $params;
 			}

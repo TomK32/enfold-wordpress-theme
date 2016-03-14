@@ -75,7 +75,7 @@ if ( !class_exists( 'avia_sc_section' ) )
     			{
     				$output .= "    <a class='avia-edit-element'  href='#edit-element' title='".__('Edit Section','avia_framework' )."'>edit</a>";
     			}
-				$output .= "<a class='avia-save-element'  href='#save-element' title='".__('Save Element as Template','avia_framework' )."'>+</a>";
+
 				$output .= "        <a class='avia-clone'  href='#clone' title='".__('Clone Section','avia_framework' )."' >".__('Clone Section','avia_framework' )."</a></div>";
 				$output .= "    <div class='avia_inner_shortcode avia_connect_sort av_drop' data-dragdrop-level='".$this->config['drop-level']."'>";
 				$output .= "<textarea data-name='text-shortcode' cols='20' rows='4'>".ShortcodeHelper::create_shortcode_by_array($name, $content, $args)."</textarea>";
@@ -410,7 +410,7 @@ array(
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
 				global $avia_config;
-			
+				
 				avia_sc_section::$section_count ++;
 			    $atts = shortcode_atts(array(	'src' => '', 
 			    								'position' => 'top left', 
@@ -469,10 +469,7 @@ array(
 					$attachment = false;
 				}
 				
-				if($custom_bg != "")
-			    {
-			         $background .= "background-color: {$custom_bg}; ";
-			    }
+				
 				
 				
 				/*set background image*/
@@ -492,8 +489,6 @@ array(
 				     $background .= $attach == 'parallax' ? "background-attachment: scroll; " : "background-attachment: {$attach}; ";
 				     $background .= "background-position: {$position}; ";
 				     
-				     
-				     
 				    if($attach == 'parallax')
 					{
 						$attachment_class = "";
@@ -501,10 +496,7 @@ array(
 					
 						$class .= " av-parallax-section";
 						$speed = apply_filters('avf_parallax_speed', "0.3", $params['id']); 
-						$params['attach'] .= "<div class='av-parallax' data-avia-parallax-ratio='{$speed}' >";
-						$params['attach'] .= "<div class='av-parallax-inner {$color} {$attachment_class}' style = '{$background}' >";
-						$params['attach'] .= "</div>";
-						$params['attach'] .= "</div>";
+						$params['attach'] .= "<div class='av-parallax {$attachment_class}' data-avia-parallax-ratio='{$speed}' style = '{$background}' ></div>";
 						$background = "";
 					}
 					
@@ -518,12 +510,12 @@ array(
 				}
 				
 				
-				if($custom_bg != "")
+				
+
+			    if($custom_bg != "")
 			    {
 			         $background .= "background-color: {$custom_bg}; ";
 			    }
-
-			    
 				
 			
 			    if($background) $background = "style = '{$background}'";

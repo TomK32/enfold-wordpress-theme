@@ -34,8 +34,6 @@ if(!function_exists('avia_backend_auto_updater'))
 			add_action('update_bulk_theme_complete_actions', array($this, 'update_complete'),10,2);	
 			add_action('upgrader_process_complete', array($this,'re_insert_custom_css'));
 			add_action('load-update.php', array($this, 'temp_save_custom_css'), 20 );
-			
-			$this->temp_save_custom_css();
 		}
 				
 		function includes()
@@ -59,8 +57,6 @@ if(!function_exists('avia_backend_auto_updater'))
 		
 		function re_insert_custom_css()
 		{
-			if(isset($this->custom_css_md5) && $this->custom_css_md5 == "1877fc72c3a2a4e3f1299ccdb16d0513") return;
-			
 			if(isset($this->custom_css))
 			{
 				$self_update = "<strong>Attention:</strong> We detected some custom styling rules in your custom.css file but could not restore it. Please open the file yourself and add the following content:<br/>
@@ -102,7 +98,6 @@ if(!function_exists('avia_backend_auto_updater'))
 				    if ($handle)
 				    {
 				    	$this->custom_css_content = fread($handle, $size);
-				    	$this->custom_css_md5 = md5($this->custom_css_content);
 				    	$this->custom_css = $css_path;
 				    	fclose($handle);
 				    }

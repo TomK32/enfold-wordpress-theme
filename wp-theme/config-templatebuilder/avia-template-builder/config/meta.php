@@ -1,14 +1,8 @@
 <?php
 global $builder;
 
-$av_default_title = __('Avia Layout Builder','avia_framework' );
-if($builder->disable_drag_drop == true)
-{
-	$av_default_title = __('Page Layout','avia_framework' );
-}
-
 $boxes = array(
-    array( 'title' =>$av_default_title, 'id'=>'avia_builder', 'page'=>array('post','portfolio','page','product'), 'context'=>'normal', 'priority'=>'high', 'expandable'=>true ),
+    array( 'title' =>__('Avia Layout Builder','avia_framework' ), 'id'=>'avia_builder', 'page'=>array('post','portfolio','page','product'), 'context'=>'normal', 'priority'=>'high', 'expandable'=>true ),
     array( 'title' =>__('Layout','avia_framework' ), 'id'=>'layout', 'page'=>array('portfolio', 'page' , 'post'), 'context'=>'side', 'priority'=>'low'),
     array( 'title' =>__('Additional Portfolio Settings','avia_framework' ), 'id'=>'preview', 'page'=>array('portfolio'), 'context'=>'normal', 'priority'=>'high' ),
     array( 'title' =>__('Breadcrumb Hierarchy','avia_framework' ), 'id'=>'hierarchy', 'page'=>array('portfolio'), 'context'=>'side', 'priority'=>'low'),
@@ -255,18 +249,6 @@ array(
                     )
         ),
         
-        
-        
-        array(
-        "slug"  => "layout",
-        "notice"  => __("Only available if the logo is not",'avia_framework')." <a href='".admin_url('admin.php?page=avia#goto_header')."'>".__("bellow the menu",'avia_framework').".</a>",
-        "id"    => "conditional_header2",
-        "type"  => "condition",
-        "class" => "avia-style", 
-        "condition" => array('option' => 'header_layout', 'compare' => "contains", "value"=>"top_nav_header"),
-        "nodescription" => true
-        ),
-        
         array(
 
         "slug"  => "layout",
@@ -283,13 +265,6 @@ array(
                             __('Hide Header on this page ','avia_framework') =>'header_transparent header_hidden ',
 
                     )
-        ),
-        
-        array(
-        "slug"  => "layout",
-        "id"    => "conditional_header_end",
-        "type"  => "condition_end", 
-        "nodescription" => true
         ),
         
         array(

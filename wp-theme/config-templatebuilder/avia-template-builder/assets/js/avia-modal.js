@@ -249,7 +249,7 @@
    		},
    		
    		convert_values: function(a)
-   		{	
+   		{
    			var o = {};
    			$.each(a, function() 
    			{
@@ -463,7 +463,7 @@
 	}
 	
 	
-	$.AviaModal.register_callback.modal_load_tabs = function()
+		$.AviaModal.register_callback.modal_load_tabs = function()
 	{
 		var scope			= this.modal,
 			tabcontainer	= scope.find('.avia-modal-tab-container'),
@@ -502,140 +502,6 @@
 					});	
 				
 			});
-	}
-	
-	
-	$.AviaModal.register_callback.modal_load_mailchimp = function()
-	{	
-		// var that contains all list data: av_mailchimp_list
-		var scope			= this.modal,
-			list			= scope.find('.avia-element-mailchimp_list select'),
-			group			= scope.find('.avia-modal-group'),
-			items			= group.find('.avia-modal-group-element'),
-			single			= scope.find('.avia-tmpl-modal-element').html(),
-			shortcode_name  = "av_mailchimp_field",
-			value			= list.val(),
-			generated_lists = [],
-			key,
-			insert_item 	= function(current, where)
-			{
-				var shortcode	= "",
-					textarea	= "",
-					insert		= $(single);
-				
-				textarea  	= insert.find('textarea');
-				shortcode 	= $.avia_builder.createShortcode(current, shortcode_name, {}, true);
-				textarea.html(shortcode);
-				$.avia_builder.update_builder_html(insert, current, true);
-				
-				if(where == "prepend")
-				{
-					group.prepend(insert);
-				}
-				else
-				{
-					group.append(insert);
-				}
-			}
-			
-			
-			//if the list is empty remove all fields
-			if(value == "")
-			{
-				group.html("");
-			}
-			else
-			{
-				//when opening the also check if the current list is up to date. remove any deprecated items and add new ones if necessary
-				if( av_mailchimp_list[value] )
-				{	
-					var currentList = av_mailchimp_list[value],
-						searchFor	= {};
-					
-					//remove deprecated items
-					items.each(function()
-					{
-						var this_item 	= $(this),
-							this_id		= this_item.find('[data-update_class_with="id"]').attr('class'),
-							this_key	= this_id.replace("avia-id-", "");
-							
-							if(!isNaN(this_key))
-							{
-								this_key = parseInt( this_key , 10);
-								
-								if(!currentList[this_key]) // remove if deprecated
-								{
-									this_item.remove();
-								}
-								else //upate if the "check" condition has changed
-								{
-									var value_textarea	 = this_item.find('textarea'),
-										shortcode_string = value_textarea.val(),
-										regex			 = new RegExp(/check=['|"](.*?)['|"]/),
-										shortcode_val	 = regex.exec(shortcode_string);
-										
-										if( shortcode_val[1] != currentList[this_key]['check'] )
-										{
-											shortcode_string = shortcode_string.replace(regex, "check='"+currentList[this_key]['check']+"'");
-											this_item.find('[data-update_class_with="check"]').removeClass().addClass('avia-check-' + currentList[this_key]['check']);
-											
-											if(currentList[this_key]['check'] != "")
-											{
-												regex = new RegExp(/disabled=['|"](.*?)['|"]/);
-												shortcode_string = shortcode_string.replace(regex, "disabled=''");
-												this_item.find('[data-update_class_with="disabled"]').removeClass();
-											}
-										}
-										
-										value_textarea.html( shortcode_string );
-								}
-							}
-					});
-					
-					
-					// add new items
-					for(key in currentList)
-					{
-						searchFor = group.find('.avia-id-' + currentList[key]['id']);
-						
-						if( !searchFor.length )
-						{
-							insert_item(currentList[key], 'prepend');
-						}
-					}
-					
-				}
-			}
-			
-			//when the user changed the dropdown menu
-			list.on('change', function()
-			{
-				if(value != "")
-				{
-					//store the current setup so that if the user changes between items it always displays the last edited version
-					generated_lists[value] = group.html();
-				}
-				
-				group.html("");			
-				
-				value = list.val();
-				
-				if( generated_lists[value] )
-				{
-					group.append(generated_lists[value]);
-				}
-				else if( av_mailchimp_list[value] )
-				{
-					for(key in av_mailchimp_list[value])
-					{
-						insert_item(av_mailchimp_list[value][key])
-					}
-					
-				}
-				
-			});
-			
-			
 	}
    	
    	

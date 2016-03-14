@@ -430,7 +430,7 @@ var lsTrBuilder = {
 				trObj['after'] = {};
 			}
 		}
-
+		//console.log(JSON.stringify(trObj));
 		// Restore name attrs
 		lsTrBuilder.restoreNameAttrs();
 

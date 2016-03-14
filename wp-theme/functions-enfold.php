@@ -612,12 +612,11 @@ if(!function_exists('avia_get_tracking_code'))
 
 		if(strpos($avia_config['analytics_code'],'UA-') === 0) // if we only get passed the UA-id create the script for the user (universal tracking code)
 		{
-			$temp = trim($avia_config['analytics_code']);
 			$avia_config['analytics_code'] = "
 			
 <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', '".$temp."', 'auto');
+ga('create', '".$avia_config['analytics_code']."', 'auto');
 ga('send', 'pageview');
 </script>
 ";
@@ -684,8 +683,7 @@ if(!function_exists('avia_header_setting'))
 							'sidebarmenu_widgets' => '',
 							'sidebarmenu_social' => 'disabled',
 							'header_menu_border' => '',
-							'header_style'	=> '',
-							'blog_global_style' => ''
+							'header_style'	=> ''
 						  );
 							
 		$settings = avia_get_option();
@@ -711,19 +709,7 @@ if(!function_exists('avia_header_setting'))
 		$header = shortcode_atts($defaults, $settings);
 		$header['header_scroll_offset'] = avia_get_header_scroll_offset($header);
 		
-		//if sidebar main menu is active set the header accordingly and return the sidebar header
 		if($header['header_position'] != "header_top") return avia_header_setting_sidebar($header, $single_val);
-		//------------------------------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------------------------------
-
-
-		//if header main menu is above the logo set a var to indicate that and disable transparency and shrinking
-		if( strpos( $header['header_layout'] , 'top_nav_header' ) !== false ) 
-		{
-			$header['header_menu_above'] = true;
-			$header['header_shrinking']  = 'disabled';
-			$transparency = false;
-		}
 		
 		//set header transparency
 		$header['header_transparency'] = "";
@@ -745,9 +731,6 @@ if(!function_exists('avia_header_setting'))
 		
 		//if the custom height is less than 70 shrinking doesnt really work
 		if($header['header_size'] == 'custom' && (int) $header['header_custom_size'] < 65) $header['header_shrinking'] = 'disabled';
-		
-		
-		
 		
 		//create a header class so we can style properly
 		$header_class_var = array(	'header_position', 
@@ -913,8 +896,7 @@ if(!function_exists('avia_header_class_string'))
 													'layout_align_content',
 													'header_unstick_top',
 													'header_stretch',
-													'header_style',
-													'blog_global_style'
+													'header_style'
 												);
 
 		$settings  	= avia_header_setting();
@@ -931,9 +913,6 @@ if(!function_exists('avia_header_class_string'))
 		}
 		
 		if($post_id) $class[] = "entry_id_".$post_id;
-		if(is_admin_bar_showing()) $class[] = "av_admin_bar_active";
-		
-		
 		
 		$class = apply_filters('avf_header_classes', $class, $necessary, $prefix);
 		
@@ -1000,7 +979,7 @@ if(!function_exists('avia_header_html_custom_height'))
 		{
 			$modifier = 0;
 			$size = $settings['header_custom_size'];
-			$bottom_bar = $settings['bottom_menu'] == true ? 52 : 0;
+			$bottom_bar = $settings['bottom_menu'] == true ? 36 : 0;
 			$top_bar	= $settings['header_topbar'] == true ? 30 : 0;
 			
 			if(!empty($settings['header_style']) && "minimal_header" == $settings['header_style'] ){ $modifier = 2;}
@@ -1010,10 +989,8 @@ if(!function_exists('avia_header_html_custom_height'))
 			$html .= "\n<style type='text/css' media='screen'>\n";
 			$html .= " #top #header_main > .container, #top #header_main > .container .main_menu ul:first-child > li > a,";
 			$html .= " #top #header_main #menu-item-shop .cart_dropdown_link{ height:{$size}px; line-height: {$size}px; }\n";
-			$html .= " .html_top_nav_header .av-logo-container{ height:{$size}px;  }\n";
 			$html .= " .html_header_top.html_header_sticky #top #wrap_all #main{ padding-top:".((int)$size + $bottom_bar + $top_bar - $modifier)."px; } \n";
 			$html .= "</style>\n";
-			
 			echo $html;
 		}
 		
@@ -1342,80 +1319,6 @@ if(!function_exists('avia_generate_grid_dimension'))
 
 
 
-/*
-function that disables the alb drag and drop for non admins
-*/
-
-if(!function_exists('avia_disable_alb_drag_drop'))
-{
-	function avia_disable_alb_drag_drop( $disable )
-	{
-		
-		if(!current_user_can('switch_themes') || avia_get_option('lock_alb_for_admins', 'disabled') != "disabled")
-		{
-			$disable = avia_get_option('lock_alb', 'disabled') != "disabled" ? true : false;
-		}		
-		
-		return $disable;
-	}
-	
-	add_filter('avf_allow_drag_drop', 'avia_disable_alb_drag_drop', 30, 1);
-}
-
-
-/*
-function to display frame
-*/
-
-if(!function_exists('avia_framed_layout'))
-{
-	function avia_framed_layout($options, $color_set, $styles)
-	{
-		global $avia_config;
-		extract($styles);
-
-		if($body_style === "av-framed")
-		{
-			$avia_config['style'][] = array(
-			'key'	=>	'direct_input',
-			'value'	=> "
-			
-			html.html_av-framed{ padding:{$frame_width}px; }
-			html.html_av-framed .av-frame{ width: {$frame_width}px; height: {$frame_width}px; background:$frame_border;}
-			.html_header_top.html_header_sticky.html_av-framed #header{left:0;}
-			"
-			);
-		}
-	}
-	
-	add_action('ava_generate_styles', 'avia_framed_layout', 40 , 3);
-}
-
-if(!function_exists('avia_framed_layout_bars'))
-{
-	function avia_framed_layout_bars()
-	{
-		if( avia_get_option('color-body_style') == "av-framed" )
-		{
-			$output  = "";
-			$output .= "<div class='av-frame av-frame-top av-frame-vert'></div>";
-			$output .= "<div class='av-frame av-frame-bottom av-frame-vert'></div>";
-			$output .= "<div class='av-frame av-frame-left av-frame-hor'></div>";
-			$output .= "<div class='av-frame av-frame-right av-frame-hor'></div>";
-			
-			echo $output;
-		}
-	}
-	
-	add_action('wp_footer', 'avia_framed_layout_bars', 10 );
-}
-
-
-
-
-
-
-
 
 /*
 function that saves the style options array into an external css file rather than fetching the data from the database
@@ -1487,202 +1390,3 @@ if(!function_exists('avia_generate_stylesheet'))
 	    }
 	}
 }
-
-
-
-
-
-
-
-/**
- * AVIA Mailchimp WIDGET
- */
-
-if (!class_exists('avia_mailchimp_widget'))
-{
-		class avia_mailchimp_widget extends WP_Widget {
-	
-		static $script_loaded = 0;
-	
-		function __construct() {
-			//Constructor
-			$widget_ops = array('classname' => 'avia_mailchimp_widget', 'description' => 'A widget that displays a Mailchimp newsletter signup form' );
-			parent::__construct( 'avia_mailchimp_widget', THEMENAME.' Mailchimp Newsletter Signup', $widget_ops );
-		}
-
-		function widget($args, $instance)
-		{
-			extract($args, EXTR_SKIP);
-			echo $before_widget;
-			
-			if ( !empty( $instance['title'] ) ) { echo $before_title . $instance['title'] . $after_title; };
-			
-			$shortcode  = "[av_mailchimp";
-			$shortcode .= " list='".$instance['mailchimp_list']."'";
-			$shortcode .= " listonly='true'";
-			$shortcode .= " hide_labels='true'";
-			$shortcode .= " double_opt_in='".$instance['double_optin']."'";
-			$shortcode .= " sent='".$instance['success']."'";
-			$shortcode .= " button='".$instance['submit_label']."'";
-			
-			$shortcode .= "]";
-				
-			
-			echo "<div class='av-mailchimp-widget av-mailchimp-widget-style-".$instance['styling']." '>";
-			echo do_shortcode($shortcode );
-			echo "</div>";
-			
-			echo $after_widget;
-
-		}
-
-
-		function update($new_instance, $old_instance)
-		{
-			$instance = $old_instance;
-			$instance['title'] 			= strip_tags($new_instance['title']);
-			$instance['success'] 		= strip_tags($new_instance['success']);
-			$instance['styling'] 		= strip_tags($new_instance['styling']);
-			$instance['double_optin'] 	= strip_tags($new_instance['double_optin']);
-			$instance['mailchimp_list'] = strip_tags($new_instance['mailchimp_list']);
-			$instance['submit_label'] = strip_tags($new_instance['submit_label']);
-			
-			return $instance;
-		}
-
-
-
-		function form($instance)
-		{
-			$instance = wp_parse_args( (array) $instance, array( 
-				'title' 			=> __('Newsletter','avia_framework'), 
-				'mailchimp_list' 	=> '', 
-				'styling' 			=> '' , 
-				'double_optin' 		=> 'true', 
-				'success' 			=> __('Thank you for subscribing to our newsletter!','avia_framework'), 
-				'submit_label' 		=> __('Subscribe','avia_framework'), 
-				) 
-			);
-				
-			$title 			= strip_tags($instance['title']);
-			$mailchimp_list = strip_tags($instance['mailchimp_list']);
-			$styling 		= strip_tags($instance['styling']);
-			$double_optin 	= strip_tags($instance['double_optin']);
-			$success 		= strip_tags($instance['success']);
-			$submit_label 	= strip_tags($instance['submit_label']);
-
-			$lists 		= get_option('av_chimplist');
-			$newlist 	= array('Select a Mailchimp list...' => "");
-		
-			if(empty($lists))
-			{
-				return;
-			}
-			
-			foreach($lists as $key => $list_item)
-			{
-				$newlist[$list_item['name']] = $key;
-			}
-			$lists = $newlist;
-
-	?>
-			<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title','avia_framework');?>:
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label></p>
-
-			<p>
-				<label for="<?php echo $this->get_field_id('mailchimp_list'); ?>"><?php _e('Mailchimp list to subscribe to','avia_framework');?></label>
-				<select class="widefat" id="<?php echo $this->get_field_id('mailchimp_list'); ?>" name="<?php echo $this->get_field_name('mailchimp_list'); ?>">
-					<?php
-					$list = "";
-
-					foreach ($lists as $answer => $key)
-					{
-						$selected = "";
-						if($key == $mailchimp_list) $selected = 'selected="selected"';
-
-						$list .= "<option $selected value='$key'>$answer</option>";
-					}
-					$list .= "</select>";
-					echo $list;
-					?>
-
-
-			</p>
-			
-			
-			<p>
-				<label for="<?php echo $this->get_field_id('styling'); ?>"><?php _e('Signup Form Styling','avia_framework');?></label>
-				<select class="widefat" id="<?php echo $this->get_field_id('styling'); ?>" name="<?php echo $this->get_field_name('styling'); ?>">
-					<?php
-					$answers = array(
-						
-						__('Default','avia_framework') => "",
-						__('Boxed','avia_framework') => "boxed_form",
-						
-					);
-					
-					$list = "";
-					
-					foreach ($answers as $answer => $key)
-					{
-						$selected = "";
-						if($key == $styling) $selected = 'selected="selected"';
-
-						$list .= "<option $selected value='$key'>$answer</option>";
-					}
-					$list .= "</select>";
-					echo $list;
-					?>
-			</p>
-			
-			<p>
-				<label for="<?php echo $this->get_field_id('double_optin'); ?>"><?php _e('Activate double opt-in?','avia_framework');?></label>
-				<select class="widefat" id="<?php echo $this->get_field_id('double_optin'); ?>" name="<?php echo $this->get_field_name('double_optin'); ?>">
-					<?php
-					$answers = array(
-						
-						__('Yes','avia_framework') => "true",
-						__('No','avia_framework') => "",
-						
-					);
-					
-					$list = "";
-					
-					foreach ($answers as $answer => $key)
-					{
-						$selected = "";
-						if($key == $double_optin) $selected = 'selected="selected"';
-
-						$list .= "<option $selected value='$key'>$answer</option>";
-					}
-					$list .= "</select>";
-					echo $list;
-					?>
-			</p>
-			
-			<p><label for="<?php echo $this->get_field_id('success'); ?>"><?php _e('Message if user subscribes successfully','avia_framework');?>:
-			<input class="widefat" id="<?php echo $this->get_field_id('success'); ?>" name="<?php echo $this->get_field_name('success'); ?>" type="text" value="<?php echo esc_attr($success); ?>" /></label></p>
-
-			<p>
-				
-				<p><label for="<?php echo $this->get_field_id('submit_label'); ?>"><?php _e('Submit Button Label','avia_framework');?>:
-			<input class="widefat" id="<?php echo $this->get_field_id('submit_label'); ?>" name="<?php echo $this->get_field_name('submit_label'); ?>" type="text" value="<?php echo esc_attr($submit_label); ?>" /></label></p>
-
-			<p>
-
-
-
-	<?php
-		}
-	}
-		
-	register_widget( 'avia_mailchimp_widget' );
-}
-
-
-
-
-
-
-
-

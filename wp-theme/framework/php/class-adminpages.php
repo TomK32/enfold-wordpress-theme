@@ -36,7 +36,7 @@ if( ! class_exists( 'avia_adminpages' ) )
          * The constructor sets up the superobject and then hooks into wordpress and creates the option pages based on the $this->avia_superobject->option_page_data array.
          * The method that gets attached to the hook is attach_options_to_menu.
          */
-		function __construct(&$avia_superobject)
+		function avia_adminpages(&$avia_superobject)
 		{
 			$this->avia_superobject = $avia_superobject;
 			add_action('admin_menu', array(&$this, 'attach_options_to_menu'));

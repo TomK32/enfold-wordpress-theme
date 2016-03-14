@@ -10,10 +10,8 @@
 	   this.dropdown   = this.container.find('.avia-template-save-button-inner');
 	   this.list       = this.dropdown.find('ul');
 	   this.save_btn   = this.container.find('.save-template-button');
-	   this.save_single_container = this.container.parents('.postbox');
 	   this.savebox     = false;
 	   this.bind_events();
-	   this.template_val = "";
 	}
 	
 	
@@ -27,9 +25,6 @@
             this.list.on('click', 'a', function(e){ obj.fetch_template(e); });
             this.toggle.on('click', function(){ obj.toggle_dropdown(); });
             this.save_btn.on('click', function(){ obj.open_modal(); });
-            this.save_single_container.on('click', '.avia-save-element', function(e){ obj.open_modal(e); });
-            
-            
             $('body').on('click', function(e){ obj.close_check(e); })
         },
     
@@ -38,7 +33,6 @@
             if(this.container.is('.avia-hidden-dropdown'))
             {
                 this.container.removeClass('avia-hidden-dropdown');
-                this.toggle.removeClass('button-primary');
             }
             else
             {
@@ -56,47 +50,38 @@
             }
         },
         
-        open_modal: function(e)
+        open_modal: function()
         {
             $.avia_builder.updateTextarea(); // make sure the content is converted to avia shortcodes            
-			
-			this.textarea_value(e);
-			
-            if(this.template_val.indexOf('[') === -1)
+
+            if(this.textarea_value().indexOf('[') === -1)
             {
                 this.toggle_dropdown();
                 new $.AviaModalNotification({mode:'attention', msg:avia_template_save_L10n.no_content});
             }
             else
             {
-                var title = avia_template_save_L10n.chose_name,
-                	msg   = "<input name = 'avia-builder-template' type='text' class='avia-template-name-ajax' value='' maxlength='40' />" +
+                var msg =   "<input name = 'avia-builder-template' type='text' class='avia-template-name-ajax' value='' maxlength='40' />" +
                             "<span class='avia-template-save-msg'>" + avia_template_save_L10n.save_msg + "</span>" +
                             "<span class='avia-template-save-chars'>" + avia_template_save_L10n.chars + ", A-Z, 0-9, -_</span>";
-                
-                if(typeof e != "undefined")
-                {
-	                title = avia_template_save_L10n.chose_save;
-                }
                           
                 this.savebox = new $.AviaModalNotification(
                 {
                     mode:'attention', 
                     msg:msg, 
-                    modal_title: title, 
+                    modal_title: avia_template_save_L10n.chose_name, 
                     button:'save',
                     scope: this,
-                    on_save: this.try_save,
-                    save_param: {event: e}
+                    on_save: this.try_save
                 });
             }
             
             return false
         },
         
-        textarea_value: function(e)
+        textarea_value: function()
         {
-            this.template_val = "";
+            var value = "";
 
             /* fetchign the value like this returns code with p + br tags which we dont want
             if(typeof window.tinyMCE == 'undefined' || typeof window.tinyMCE.get('content') == 'undefined')
@@ -108,18 +93,8 @@
                 value = $.trim(window.tinyMCE.get('content').getContent({format:'raw'}));
             }
             */
-            
-            
-            //store only a single el?
-            if(typeof e != "undefined" && e.currentTarget.className == "avia-save-element")
-			{
-				this.template_val = $.trim($(e.currentTarget).parent('div').next('.avia_inner_shortcode').find('textarea').val());
-			}
-			else
-			{
-            	this.template_val = $.trim($('#content.wp-editor-area').val());
-            }
-            return this.template_val;
+            value = $.trim($('#content.wp-editor-area').val());
+            return value;
         },
         
         update_entry_list: function(name)
@@ -265,8 +240,8 @@
         },
         
          
-        try_save: function(values, event)
-        {   	        
+        try_save: function(values)
+        {            
             var obj              = this,
                 name             = values['avia-builder-template'],
                 disallowed_chars = name.match(/[^a-zA-Z0-9-_ ]/),
@@ -290,6 +265,7 @@
             
             if(!error)
             {
+                
                 $.ajax({
 					type: "POST",
 					url: ajaxurl,
@@ -299,7 +275,7 @@
 						post_id: avia_globals.post_id,
 						templateName: name,
 						avia_request: true,
-						templateValue: obj.template_val,
+						templateValue: obj.textarea_value(),
 						'avia-save-nonce': $('#avia-save-nonce').val()
 					},
 					beforeSend: function()
@@ -335,12 +311,6 @@
 							{
 				                obj.update_entry_list(name);
 				                obj.savebox.close();
-				                
-				                //mark the template button if a single element was saved
-				                if(typeof event != "undefined")
-				                {
-					                obj.toggle.addClass('button-primary');
-				                }
 							}
 						}
 					}

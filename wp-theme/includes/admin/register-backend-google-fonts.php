@@ -79,7 +79,6 @@ $google_fonts = apply_filters('avf_google_heading_font', array(	__('Default', 'a
 						'Righteous' => 'Righteous',
 						'Roboto' => 'Roboto',
 						
-						'Sacramento' => 'Sacramento',
 						'Salsa'=>'Salsa',
 						'Signika Negative'=>'Signika Negative',
 						'Source Serif Pro' => 'Source Serif Pro:400,600,700',

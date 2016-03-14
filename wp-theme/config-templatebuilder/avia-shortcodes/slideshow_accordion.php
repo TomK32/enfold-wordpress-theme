@@ -425,8 +425,6 @@ if ( !class_exists( 'aviaccordion' ) )
 		{
 			foreach($this->config['content'] as $key => $slide)
 			{
-				if(!isset($slide['attr']['link'])) $slide['attr']['link'] = "lightbox";
-				
 				$this->slides[$key] = new stdClass();
 				$this->slides[$key]->post_title		= isset($slide['attr']['title']) ? $slide['attr']['title'] : "";
 				$this->slides[$key]->post_excerpt	= $slide['content'];

@@ -6,9 +6,6 @@ if(empty($post_loop_count)) $post_loop_count = 1;
 $blog_style = !empty($avia_config['blog_style']) ? $avia_config['blog_style'] : avia_get_option('blog_style','multi-big');
 if(is_single()) $blog_style = avia_get_option('single_post_style','single-big');
 
-$blog_global_style = avia_get_option('blog_global_style',''); //alt: elegant-blog
-
-
 $initial_id = avia_get_the_ID();
 
 // check if we got posts to display:
@@ -102,18 +99,15 @@ if (have_posts()) :
 
 
         //echo preview image
-        if($blog_global_style !== 'elegant-blog')
+        if(strpos($blog_style, 'big') !== false)
         {
-		    if(strpos($blog_style, 'big') !== false)
-		    {
-		        if($slider) $slider = '<a href="'.$link.'" title="'.$featured_img_desc.'">'.$slider.'</a>';
-		        if($slider) echo '<div class="big-preview '.$blog_style.'">'.$slider.'</div>';
-		    }
-			
-		    if(!empty($before_content))
-		        echo '<div class="big-preview '.$blog_style.'">'.$before_content.'</div>';
-		}
-		
+            if($slider) $slider = '<a href="'.$link.'" title="'.$featured_img_desc.'">'.$slider.'</a>';
+            if($slider) echo '<div class="big-preview '.$blog_style.'">'.$slider.'</div>';
+        }
+
+        if(!empty($before_content))
+            echo '<div class="big-preview '.$blog_style.'">'.$before_content.'</div>';
+
         echo "<div class='blog-meta'>";
 
         $blog_meta_output = "";
@@ -146,68 +140,8 @@ if (have_posts()) :
 
         echo "<div class='entry-content-wrapper clearfix {$post_format}-content'>";
             echo '<header class="entry-content-header">';
-            	
-            	$content_output  =  '<div class="entry-content" '.avia_markup_helper(array('context' => 'entry_content','echo'=>false)).'>';
-				$content_output .=  $content;
-				$content_output .=  '</div>';
-            	
-            	
-            	$taxonomies  = get_object_taxonomies(get_post_type($the_id));
-                $cats = '';
-                $excluded_taxonomies = array_merge( get_taxonomies( array( 'public' => false ) ), array('post_tag','post_format') );
-				$excluded_taxonomies = apply_filters('avf_exclude_taxonomies', $excluded_taxonomies, get_post_type($the_id), $the_id);
+                echo $title;
 
-                if(!empty($taxonomies))
-                {
-                    foreach($taxonomies as $taxonomy)
-                    {
-                        if(!in_array($taxonomy, $excluded_taxonomies))
-                        {
-                            $cats .= get_the_term_list($the_id, $taxonomy, '', ', ','').' ';
-                        }
-                    }
-                }
-            	
-            	
-            	
-            	//elegant blog
-            	if( $blog_global_style == 'elegant-blog' )
-            	{
-	            	if(!empty($cats))
-                    {
-                        echo '<span class="blog-categories minor-meta">';
-                        echo $cats;
-                        echo '</span>';
-                        $cats = "";
-                    }
-            
-					echo $title;
-					
-					echo '<span class="av-vertical-delimiter"></span>';
-					
-					//echo preview image
-				    if(strpos($blog_style, 'big') !== false)
-				    {
-				        if($slider) $slider = '<a href="'.$link.'" title="'.$featured_img_desc.'">'.$slider.'</a>';
-				        if($slider) echo '<div class="big-preview '.$blog_style.'">'.$slider.'</div>';
-				    }
-					
-				    if(!empty($before_content))
-				        echo '<div class="big-preview '.$blog_style.'">'.$before_content.'</div>';
-					
-					
-					echo $content_output;
-					
-					$cats = "";
-					$title = "";
-					$content_output = "";
-				}
-				
-				
-				
-				
-				echo $title;
-				
                 echo "<span class='post-meta-infos'>";
                 $markup = avia_markup_helper(array('context' => 'entry_time','echo'=>false));
                 echo "<time class='date-container minor-meta updated' $markup>".get_the_time(get_option('date_format'))."</time>";
@@ -226,6 +160,21 @@ if (have_posts()) :
                     echo "<span class='text-sep text-sep-comment'>/</span>";
                     }
 
+
+                    $taxonomies  = get_object_taxonomies(get_post_type($the_id));
+                    $cats = '';
+                    $excluded_taxonomies =  apply_filters('avf_exclude_taxonomies', array('post_tag','post_format'), get_post_type($the_id), $the_id);
+
+                    if(!empty($taxonomies))
+                    {
+                        foreach($taxonomies as $taxonomy)
+                        {
+                            if(!in_array($taxonomy, $excluded_taxonomies))
+                            {
+                                $cats .= get_the_term_list($the_id, $taxonomy, '', ', ','').' ';
+                            }
+                        }
+                    }
 
                     if(!empty($cats))
                     {
@@ -247,7 +196,9 @@ if (have_posts()) :
 
 
             // echo the post content
-            echo $content_output;
+            echo '<div class="entry-content" '.avia_markup_helper(array('context' => 'entry_content','echo'=>false)).'>';
+            echo $content;
+            echo '</div>';
 
             echo '<footer class="entry-footer">';
 

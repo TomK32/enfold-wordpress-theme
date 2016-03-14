@@ -100,7 +100,7 @@ background-color:$bg;
 color: $color;
 }
 
-$key .heading-color, $key a.iconbox_icon:hover, $key h1, $key h2, $key h3, $key h4, $key h5, $key h6, $key .sidebar .current_page_item>a, $key .sidebar .current-menu-item>a, $key .pagination .current, $key .pagination a:hover, $key strong.avia-testimonial-name, $key .heading, $key .toggle_content strong, $key .toggle_content strong a, $key .tab_content strong, $key .tab_content strong a , $key .asc_count, $key .avia-testimonial-content strong, $key div .news-headline, #top $key .av-related-style-full .av-related-title, $key .av-default-style .av-countdown-cell-inner .av-countdown-time, $key .wp-playlist-item-meta.wp-playlist-item-title, #top $key .av-no-image-slider h2 a{
+$key .heading-color, $key a.iconbox_icon:hover, $key h1, $key h2, $key h3, $key h4, $key h5, $key h6, $key .sidebar .current_page_item>a, $key .sidebar .current-menu-item>a, $key .pagination .current, $key .pagination a:hover, $key strong.avia-testimonial-name, $key .heading, $key .toggle_content strong, $key .toggle_content strong a, $key .tab_content strong, $key .tab_content strong a , $key .asc_count, $key .avia-testimonial-content strong, $key div .news-headline, #top $key .av-related-style-full .av-related-title, $key .av-default-style .av-countdown-cell-inner .av-countdown-time, $key .wp-playlist-item-meta.wp-playlist-item-title{
     color:$heading;
 }
 
@@ -111,7 +111,7 @@ color: $meta;
 $key .special-heading-inner-border{ border-color: $color; }
 $key .meta-heading .special-heading-inner-border{ border-color: $meta; }
 
-$key a, $key .widget_first, $key strong, $key b, $key b a, $key strong a, $key #js_sort_items a:hover, $key #js_sort_items a.active_sort, $key .av-sort-by-term a.active_sort, $key .special_amp, $key .taglist a.activeFilter, $key #commentform .required, #top $key .av-no-color.av-icon-style-border a.av-icon-char, .html_elegant-blog #top $key .blog-categories a, .html_elegant-blog #top $key .blog-categories a:hover{
+$key a, $key .widget_first, $key strong, $key b, $key b a, $key strong a, $key #js_sort_items a:hover, $key #js_sort_items a.active_sort, $key .av-sort-by-term a.active_sort, $key .special_amp, $key .taglist a.activeFilter, $key #commentform .required, #top $key .av-no-color.av-icon-style-border a.av-icon-char{
 color:$primary;
 }
 
@@ -150,10 +150,9 @@ background-color:$border;
 border-color: $bg;
 }
 
-$key table, $key .widget_nav_menu ul:first-child>.current-menu-item, $key .widget_nav_menu ul:first-child>.current_page_item, $key .widget_nav_menu ul:first-child>.current-menu-ancestor, $key .pagination .current, $key .pagination a, $key.iconbox_top .iconbox_content, $key .av_promobox, $key .toggle_content, $key .toggler:hover, $key .related_posts_default_image, $key .search-result-counter, $key .container_wrap_meta, $key .avia-content-slider .slide-image, $key .avia-slider-testimonials .avia-testimonial-content, $key .avia-testimonial-arrow-wrap .avia-arrow, $key .news-thumb, $key .portfolio-preview-content, $key .portfolio-preview-content .avia-arrow, $key .av-magazine .av-magazine-entry-icon, $key .related_posts.av-related-style-full a, $key .aviaccordion-slide, $key.avia-fullwidth-portfolio .pagination, $key .isotope-item.special_av_fullwidth .av_table_col.portfolio-grid-image, $key .av-catalogue-list li:hover, $key .wp-playlist, $key .avia-slideshow-fixed-height > li, $key .avia-form-success{
+$key table, $key .widget_nav_menu ul:first-child>.current-menu-item, $key .widget_nav_menu ul:first-child>.current_page_item, $key .widget_nav_menu ul:first-child>.current-menu-ancestor, $key .pagination .current, $key .pagination a, $key.iconbox_top .iconbox_content, $key .av_promobox, $key .toggle_content, $key .toggler:hover, $key .related_posts_default_image, $key .search-result-counter, $key .container_wrap_meta, $key .avia-content-slider .slide-image, $key .avia-slider-testimonials .avia-testimonial-content, $key .avia-testimonial-arrow-wrap .avia-arrow, $key .news-thumb, $key .portfolio-preview-content, $key .portfolio-preview-content .avia-arrow, $key .av-magazine .av-magazine-entry-icon, $key .related_posts.av-related-style-full a, $key .aviaccordion-slide, $key.avia-fullwidth-portfolio .pagination, $key .isotope-item.special_av_fullwidth .av_table_col.portfolio-grid-image, $key .av-catalogue-list li:hover, $key .wp-playlist{
 background: $bg2;
 }
-
 
 
 #top $key .post_timeline li:hover .timeline-bullet{
@@ -828,7 +827,7 @@ $avia_config['style'] = array(
 
 		//google webfonts
 		array(
-		'elements'	=> 'h1, h2, h3, h4, h5, h6, #top .title_container .main-title, tr.pricing-row td, #top .portfolio-title, .callout .content-area, .avia-big-box .avia-innerbox, .av-special-font, .av-current-sort-title, .html_elegant-blog #top .minor-meta',
+		'elements'	=> 'h1, h2, h3, h4, h5, h6, #top .title_container .main-title, tr.pricing-row td, #top .portfolio-title, .callout .content-area, .avia-big-box .avia-innerbox, .av-special-font, .av-current-sort-title',
 		'key'	=>	'google_webfont',
 		'value'		=> avia_get_option('google_webfont')
 		),

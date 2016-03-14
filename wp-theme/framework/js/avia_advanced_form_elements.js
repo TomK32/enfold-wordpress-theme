@@ -19,9 +19,6 @@ jQuery(function($) {
     $('.avia_link_controller').avia_prefill_options();
     $('.avia_onchange').avia_on_change();
     $('.avia_styling_wizard').avia_styling_wizard();
-    $('.avia_verify_button').avia_verify_input();
-    
-    
 
     //unify select dropdowns
     $('.avia_select_unify select').live('change', function()
@@ -44,90 +41,6 @@ jQuery(function($) {
     }
     
   });
-
-
-
-
-
-/************************************************************************
-avia_target
-
-verifies an input field by calling a user defined ajax function
-*************************************************************************/
-(function($)
-{
-	$.fn.avia_verify_input = function(variables) 
-	{
-		var button 		= $(this),
-			container 	= button.parents('.avia_verification_field'),
-			input		= container.find('.avia_verify_input input'),
-			answer		= container.find('.av-verification-result'),
-			value		= "",
-			action		= button.data('av-verification-callback'),
-			nonce		= $('#avia_hidden_data input[name=avia-nonce]').val(),
-			ref 		= $('#avia_hidden_data input[name=_wp_http_referer]').val(),
-			loader		= $('.avia_header .avia_loading, .avia_footer .avia_loading'),
-			testing     = false;
-			
-		
-		button.on('click', function()
-		{
-			if(testing) return false;
-			
-			value = input.val();
-			
-			//send ajax request to the ajax-admin.php script	
-			$.ajax({
-					type: "POST",
-					url: window.ajaxurl,
-					data: 
-					{
-						action: 'avia_ajax_verify_input',
-						key: input.attr('id'),
-						avia_ajax: true,
-						value: value,
-						callback: action,
-						_wpnonce: nonce,
-						_wp_http_referer: ref
-						
-					},
-					beforeSend: function()
-					{
-						//show loader
-						 loader.css({opacity:0, display:"block", visibility:'visible'}).animate({opacity:1});
-						 button.addClass('avia_button_inactive');
-						 testing = true;
-					},
-					error: function()
-					{
-						answer.html('Could not connect to the internet. Please reload the page and try again');
-					},
-					success: function(response)
-					{
-						if(response.indexOf('avia_trigger_save') !== -1)
-						{
-							$('.avia_submit:eq(0)').trigger('click');
-							response = response.replace('avia_trigger_save', "");
-						}
-						
-						answer.html(response);
-						
-					},
-					complete: function(response)
-					{	
-						loader.fadeOut();
-						button.removeClass('avia_button_inactive');
-						testing = false;
-					}
-				});	
-
-			return false;
-		});
-
-	};
-})(jQuery);	
-
-
 
 
 

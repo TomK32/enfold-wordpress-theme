@@ -62,7 +62,7 @@ if( ! class_exists( 'avia_htmlhelper' ) )
          *
          * The constructor sets up the superobject, if it was passed
          */
-		function __construct($avia_superobject = false)
+		function avia_htmlhelper($avia_superobject = false)
 		{
 		
 			if(!$avia_superobject) { $avia_superobject = $GLOBALS['avia']; }
@@ -200,7 +200,7 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 					}
 					else
 					{
-						$output .= $this->{$element['type']}( $element );
+						$output .= $this->$element['type']( $element );
 					}
 				}
 				else
@@ -219,7 +219,7 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 					}
 					else
 					{
-						$output .= $this->{$element['type']}( $element );
+						$output .= $this->$element['type']( $element );
 					}
 					
 					$output .= $this->section_end( $element );
@@ -342,38 +342,6 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			return $output;
 		}
 
-		
-		
-		function verification_field( $element )
-		{
-			$callback 			= $element['ajax'];
-			$element['simple'] 	= true;
-			$output  			= "";
-			$ajax				= false;
-			
-			if(isset($element['button-relabel']) && !empty($element['std']))
-			{
-				$element['button-label'] = $element['button-relabel'];
-			}
-			
-			$output .= '<span class="avia_style_wrap avia_verify_input avia_upload_style_wrap">';
-			$output .= $this->text($element);
-			$output .= '<a href="#" data-av-verification-callback="'.$callback.'" class="avia_button avia_verify_button" id="avia_check'.$element['id'].'">'.$element['button-label'].'</a>';
-			$output .= '</span>';
-			$output .= isset($element['help']) ? "<small>".$element['help']."</small>" : "";
-			
-			$output .= "<div class='av-verification-result'>";
-			
-			if($element['std'] != "")
-			{
-				$output .= str_replace('avia_trigger_save' ,"",$callback( $element['std'] , $ajax));
-			}
-			
-			$output .= "</div>";
-			
-			return $output;
-		}
-		
 		
 		
 		/**

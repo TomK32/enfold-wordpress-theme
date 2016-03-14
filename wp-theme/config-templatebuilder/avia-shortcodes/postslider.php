@@ -263,15 +263,7 @@ if ( !class_exists( 'avia_post_slider' ) )
 			$loop_counter		= 1;
 			$autoplay 			= $autoplay == "no" ? false : true;
 			$total				= $columns % 2 ? "odd" : "even";
-			$blogstyle 			= function_exists('avia_get_option') ? avia_get_option('blog_global_style','') : "";
-			$excerpt_length 	= 60;
-			
-			
-			if($blogstyle !== "")
-			{
-				$excerpt_length = 240;
-			}
-			
+
 			switch($columns)
 			{
 				case "1": $grid = 'av_fullwidth';  if($preview_mode == 'auto') $image_size = 'large'; break;
@@ -317,7 +309,7 @@ if ( !class_exists( 'avia_post_slider' ) )
 
 
 					$permalink = '<div class="read-more-link"><a href="'.get_permalink($the_id).'" class="more-link">'.__('Read more','avia_framework').'<span class="more-link-arrow">  &rarr;</span></a></div>';
-					$prepare_excerpt = !empty($entry->post_excerpt) ? $entry->post_excerpt : avia_backend_truncate($entry->post_content, apply_filters( 'avf_postgrid_excerpt_length' , $excerpt_length) , apply_filters( 'avf_postgrid_excerpt_delimiter' , " "), "…", true, '');
+					$prepare_excerpt = !empty($entry->post_excerpt) ? $entry->post_excerpt : avia_backend_truncate($entry->post_content, apply_filters( 'avf_postgrid_excerpt_length' , 60) , apply_filters( 'avf_postgrid_excerpt_delimiter' , " "), "…", true, '');
 
 		                  	if($format == 'link')
 		                   	{
@@ -391,69 +383,29 @@ if ( !class_exists( 'avia_post_slider' ) )
 
                     $markup = avia_markup_helper(array('context' => 'entry_title','echo'=>false, 'id'=>$the_id, 'custom_markup'=>$custom_markup));
                     $output .= '<header class="entry-content-header">';
-                    
-                    if (!empty($title))
-                    {
-	                    if($show_meta)
-	                    {
-		                    $taxonomies  = get_object_taxonomies(get_post_type($the_id));
-			                $cats = '';
-			                $excluded_taxonomies = array_merge( get_taxonomies( array( 'public' => false ) ), array('post_tag','post_format') );
-							$excluded_taxonomies = apply_filters('avf_exclude_taxonomies', $excluded_taxonomies, get_post_type($the_id), $the_id);
-			
-			                if(!empty($taxonomies))
-			                {
-			                    foreach($taxonomies as $taxonomy)
-			                    {
-			                        if(!in_array($taxonomy, $excluded_taxonomies))
-			                        {
-			                            $cats .= get_the_term_list($the_id, $taxonomy, '', ', ','').' ';
-			                        }
-			                    }
-			                }
-			                
-			                if(!empty($cats))
-		                    {
-		                        $output .= '<span class="blog-categories minor-meta">';
-		                        $output .= $cats;
-		                        $output .= '</span>';
-		                    }
-	                    }
-	                    
-                    	$output .=  "<h3 class='slide-entry-title entry-title' $markup><a href='{$link}' title='".esc_attr(strip_tags($title))."'>".$title."</a></h3>";
-                    	$output .= '<span class="av-vertical-delimiter"></span>';
-                    }
-                    
+                    $output .= !empty($title) ? "<h3 class='slide-entry-title entry-title' $markup><a href='{$link}' title='".esc_attr(strip_tags($title))."'>".$title."</a></h3>" : '';
                     $output .= '</header>';
 
                     if($show_meta && !empty($excerpt))
 					{
-						$meta  = "<div class='slide-meta'>";
+						$output .= "<div class='slide-meta'>";
 						if ( $commentCount != "0" || comments_open($the_id) && $entry->post_type != 'portfolio')
 						{
 							$link_add = $commentCount === "0" ? "#respond" : "#comments";
 							$text_add = $commentCount === "1" ? __('Comment', 'avia_framework' ) : __('Comments', 'avia_framework' );
 
-							$meta .= "<div class='slide-meta-comments'><a href='{$link}{$link_add}'>{$commentCount} {$text_add}</a></div><div class='slide-meta-del'>/</div>";
+							$output .= "<div class='slide-meta-comments'><a href='{$link}{$link_add}'>{$commentCount} {$text_add}</a></div><div class='slide-meta-del'>/</div>";
 						}
                         $markup = avia_markup_helper(array('context' => 'entry_time','echo'=>false, 'id'=>$the_id, 'custom_markup'=>$custom_markup));
-						$meta .= "<time class='slide-meta-time updated' $markup>" .get_the_time(get_option('date_format'), $the_id)."</time>";
-						$meta .= "</div>";
-						
-						if($blogstyle !== "elegant-blog")
-						{
-							$output .= $meta;
-							$meta = "";
-						}
+						$output .= "<time class='slide-meta-time updated' $markup>" .get_the_time(get_option('date_format'), $the_id)."</time>";
+						$output .= "</div>";
 					}
                     $markup = avia_markup_helper(array('context' => 'entry_content','echo'=>false, 'id'=>$the_id, 'custom_markup'=>$custom_markup));
-					$excerpt = apply_filters( 'avf_post_slider_entry_excerpt', $excerpt, $prepare_excerpt, $permalink, $entry );
-					$output .= !empty($excerpt) ? "<div class='slide-entry-excerpt entry-content' $markup>".$excerpt."</div>" : "";
+		 	$excerpt = apply_filters( 'avf_post_slider_entry_excerpt', $excerpt, $prepare_excerpt, $permalink, $entry );
+			$output .= !empty($excerpt) ? "<div class='slide-entry-excerpt entry-content' $markup>".$excerpt."</div>" : "";
 
                     $output .= "</div>";
-                    $output .= '<footer class="entry-footer">';
-                    if( !empty($meta) ) $output .= $meta;
-                    $output .= '</footer>';
+                    $output .= '<footer class="entry-footer"></footer>';
 					$output .= "</article>";
 
 					$loop_counter ++;
@@ -545,14 +497,9 @@ if ( !class_exists( 'avia_post_slider' ) )
 
 				if($params['offset'] == 'no_duplicates')
                 {
-                    $params['offset'] = false;
+                    $params['offset'] = 0;
                     $no_duplicates = true;
                 }
-                
-                if( $params['offset'] == 0 )
-				{
-					$params['offset'] = false;
-				}
 
                 if(empty($params['post_type'])) $params['post_type'] = get_post_types();
                 if(is_string($params['post_type'])) $params['post_type'] = explode(',', $params['post_type']);

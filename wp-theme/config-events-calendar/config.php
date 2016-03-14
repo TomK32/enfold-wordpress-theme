@@ -1,8 +1,7 @@
 <?php
 
 //if either calendar plugin or modified version of the plugin that is included in the theme is available we can make use of it, otherwise return
-
-if ( !class_exists( 'Tribe__Events__Main' ) ) return false;
+if ( !class_exists( 'TribeEvents' ) ) return false;
 
 define( 'AVIA_EVENT_PATH', AVIA_BASE . 'config-events-calendar/' );
 
@@ -44,7 +43,7 @@ if(!function_exists('avia_events_tempalte_paths'))
 
 if(!function_exists('avia_events_general_tab'))
 {
-	add_action('option_tribe_events_calendar_options', 'avia_events_perma_options', 10);
+	add_action('tribe_get_options', 'avia_events_perma_options', 10);
 	
 	function avia_events_perma_options($options)
 	{
@@ -109,13 +108,13 @@ if(!function_exists('avia_events_modify_options'))
 
 if(!function_exists('avia_events_upsell'))
 {
-	$tec = Tribe__Events__Main::instance();
+	$tec = TribeEvents::instance();
 	remove_action( 'tribe_events_cost_table', array($tec, 'maybeShowMetaUpsell'));
 	add_action( 'tribe_events_cost_table', 'avia_events_upsell', 10);
 
 	function avia_events_upsell()
 	{	
-		if(!class_exists( 'Tribe__Events__Pro__Main' )){
+		if(!class_exists( 'TribeEventsPro' )){
 	
 		?><tr class="eventBritePluginPlug">
 		<td colspan="2" class="tribe_sectionheader">
@@ -137,7 +136,7 @@ if(!function_exists('avia_tribe_ref'))
 
 function avia_tribe_ref()
 {
-	if(class_exists( 'Tribe__Events__Pro__Main' )) return "";
+	if(class_exists( 'TribeEventsPro' )) return "";
 
 	$output = "<p>";
 	$output .= __('Looking for additional functionality including recurring events, ticket sales, publicly submitted events, new views and more?', 'avia_framework' )." ";
@@ -207,12 +206,12 @@ if(!function_exists('avia_events_breadcrumb'))
 			$trail['trail_end'] = __('No Events Found','avia_framework');
 		}
 		
-		if((isset($avia_config['currently_viewing']) && $avia_config['currently_viewing'] == 'events') || tribe_is_month() || get_post_type() === Tribe__Events__Main::POSTTYPE || is_tax(Tribe__Events__Main::TAXONOMY) )
+		if((isset($avia_config['currently_viewing']) && $avia_config['currently_viewing'] == 'events') || tribe_is_month() || get_post_type() === TribeEvents::POSTTYPE || is_tax(TribeEvents::TAXONOMY) )
 		{	
 			$events = __('Events','avia_framework');
 			$events_link = '<a href="'.tribe_get_events_link().'">'.$events.'</a>';
 			
-			if(is_tax(Tribe__Events__Main::TAXONOMY) )
+			if(is_tax(TribeEvents::TAXONOMY) )
 			{
 				$last = array_pop($trail);
 				$trail[] = $events_link;
@@ -288,10 +287,10 @@ if(!function_exists('avia_events_close_div'))
 
 
 /*PRO PLUGIN*/
-if ( !class_exists( 'Tribe__Events__Pro__Main' ) ) return false;
+if ( !class_exists( 'TribeEventsPro' ) ) return false;
 
 /*move related events*/
-$tec = Tribe__Events__Pro__Main::instance();
+$tec = TribeEventsPro::instance();
 remove_action( 'tribe_events_single_event_after_the_meta', array( $tec, 'register_related_events_view' ) );
 add_action( 'tribe_events_single_event_after_the_content', array( $tec, 'register_related_events_view' ) );
 

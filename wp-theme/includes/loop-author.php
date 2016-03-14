@@ -4,7 +4,6 @@ global $avia_config, $post_loop_count;
 
 if(empty($post_loop_count)) $post_loop_count = 1;
 $blog_style = avia_get_option('blog_style','multi-big');
-$blog_global_style = avia_get_option('blog_global_style',''); //alt: elegant-blog
 
 // check if we got posts to display:
 if (have_posts()) :
@@ -67,54 +66,10 @@ if (have_posts()) :
 			<div class="entry-content-wrapper clearfix <?php echo $post_format; ?>-content">
                 <header class="entry-content-header">
                     <?php
-					
-					$content_output  =  '<div class="entry-content" '.avia_markup_helper(array('context' => 'entry_content','echo'=>false)).'>';
-					$content_output .=  wpautop($content);
-					$content_output .=  '</div>';
-	            	
-	            	
-	            	$taxonomies  = get_object_taxonomies(get_post_type($the_id));
-	                $cats = '';
-	                					
-					$excluded_taxonomies = array_merge( get_taxonomies( array( 'public' => false ) ), array('post_tag','post_format') );
-					$excluded_taxonomies = apply_filters('avf_exclude_taxonomies', $excluded_taxonomies, get_post_type($the_id), $the_id);
-					
-	                if(!empty($taxonomies))
-	                {
-	                    foreach($taxonomies as $taxonomy)
-	                    {
-	                        if(!in_array($taxonomy, $excluded_taxonomies))
-	                        {
-	                            $cats .= get_the_term_list($the_id, $taxonomy, '', ', ','').' ';
-	                        }
-	                    }
-	                }
-					//elegant blog
-	            	if( $blog_global_style == 'elegant-blog' )
-	            	{
-		            	if(!empty($cats))
-	                    {
-	                        echo '<span class="blog-categories minor-meta">';
-	                        echo $cats;
-	                        echo '</span>';
-	                        $cats = "";
-	                    }
-	            
-						echo $title;
-						
-						echo '<span class="av-vertical-delimiter"></span>';
-						
-						
-						echo $content_output;
-						
-						$cats = "";
-						$title = "";
-						$content_output = "";
-					}
-					
+
                     //echo the post title
                     echo $title;
-                    
+
                     ?>
                     <span class='post-meta-infos'>
                         <span class='date-container minor-meta updated'><?php the_time(get_option('date_format')); ?></span>
@@ -127,12 +82,27 @@ if (have_posts()) :
                                               "% ".__('Comments','avia_framework'),'comments-link',
                                               "".__('Comments Disabled','avia_framework'));
                         echo "</span>";
-						echo "<span class='text-sep text-sep-comment'>/</span>";
                         }
 
 
+                        $taxonomies  = get_object_taxonomies(get_post_type($the_id));
+                        $cats = '';
+                        $excluded_taxonomies =  apply_filters('avf_exclude_taxonomies', array('post_tag','post_format'), get_post_type($the_id), $the_id);
+
+                        if(!empty($taxonomies))
+                        {
+                            foreach($taxonomies as $taxonomy)
+                            {
+                                if(!in_array($taxonomy, $excluded_taxonomies))
+                                {
+                                    $cats .= get_the_term_list($the_id, $taxonomy, '', ', ','').' ';
+                                }
+                            }
+                        }
+
                         if(!empty($cats))
                         {
+                            echo "<span class='text-sep'>/</span>";
                             echo '<span class="blog-categories minor-meta">'.__('in','avia_framework')." ";
                             echo $cats;
                             echo '</span><span class="text-sep text-sep-cat">/</span>';
@@ -153,7 +123,9 @@ if (have_posts()) :
 
 				<?php
 				// echo the post content
-				echo $content_output;
+				echo '<div class="entry-content"'.avia_markup_helper(array('context' => 'entry_content','echo'=>false)).'>';
+				echo wpautop($content);
+				echo '</div>';
 
 				?>
 			</div>

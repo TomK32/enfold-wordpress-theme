@@ -174,7 +174,7 @@ if ( !class_exists( 'avia_sc_headline_rotator' ) )
 					
 					array(	
 							"name" 	=> __("HTML Markup", 'avia_framework' ),
-							"desc" 	=> __("Select which kind of HTML markup you want to apply to set the importance of the headline for search engines", 'avia_framework' ),
+							"desc" 	=> __("Select which kind of HTML markup you want to apply.", 'avia_framework' ),
 							"id" 	=> "tag",
 							"type" 	=> "select",
 							"std" 	=> "h3",

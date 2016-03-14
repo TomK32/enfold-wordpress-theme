@@ -1,7 +1,6 @@
 <?php
 $weight 	= array(__('Default','avia_framework') => '' , __('Normal','avia_framework') =>'normal', __('Bold','avia_framework')=>'bold', __('Light','avia_framework')=>'lighter');
 $transform 	= array(__('Default','avia_framework') => '' , __('None'  ,'avia_framework') =>'none', __('Uppercase','avia_framework')=>'uppercase', __('Lowercase','avia_framework')=>'lowercase');
-$align 	= array(__('Default','avia_framework') => '' , __('Left'  ,'avia_framework') =>'left', __('Center','avia_framework')=>'center', __('Right','avia_framework')=>'right');
 
 
 $advanced = array();
@@ -176,20 +175,13 @@ $advanced['main_menu'] = array(
 	"group" 		=> __("Main Menu",'avia_framework'),
 	"description"	=> __("Change the styling for your main menu links",'avia_framework'),
 	"selector"		=> array(
-		"#top #header_main_alternate" => array(  "background_color" => "background-color: %background_color%;" ),
-		"#top #header .av-main-nav > li[hover] " => array(  "font_family" => "font-family: %font_family%;" ),
 		"#top #header .av-main-nav > li[hover] > a" => "",
-		".av_seperator_small_border .av-main-nav > li[hover] > a > .avia-menu-text,
-		#top #wrap_all #header #menu-item-search[hover]>a
-		
-		"=> array(  "border_color" => "border-color: %border_color%;" ),
 		"#top #header .av-main-nav > li[hover] > a .avia-menu-text, #top #header .av-main-nav > li[hover] > a .avia-menu-subtext"=> array(  "color" => "color: %color%;" )
 	),
 	"sections"		=> false,
 	"hover"			=> true,
 	"edit"			=> array(	'color' 			=> array('type' => 'colorpicker', 'name'=> __("Font Color",'avia_framework')), 
 								'background_color' 	=> array('type' => 'colorpicker', 'name'=> __("Background Color",'avia_framework')),
-								'border_color' 		=> array('type' => 'colorpicker', 'name'=> __("Border Color",'avia_framework')),
 								'font_size' 		=> array('type' => 'size', 'range' => '10-30', 'name'=> __("Font Size",'avia_framework')),
 								'font_family' 		=> array('type' => 'font', 'name'=> __("Font Family",'avia_framework'), 'options' => $google_fonts),
 							)						
@@ -219,16 +211,13 @@ $advanced['top_bar'] = array(
 	"description"	=> __("Change the styling for the small bar above the main menu which can contain social icons, a second menu and a phone number ",'avia_framework'),
 	"selector"		=> array(
 							 	"#top #header_meta, #top #header_meta nav ul ul li, #top #header_meta nav ul ul a, #top #header_meta nav ul ul" => array("background_color" => "background-color: %background_color%;"), 
-							 	"#top #header_meta a, #top #header_meta li, #top #header_meta .phone-info" => array( "border_color" => "border-color: %border_color%;", "color" => "color: %color%;"),
-							 	"#top #header_meta" => array("font_family" => "font-family: %font_family%;"), 
-							 	
+							 	"#top #header_meta a, #top #header_meta li, #top #header_meta .phone-info" => array( "border_color" => "border-color: %border_color%;", "color" => "color: %color%;" )
 							 ),
 	"sections"		=> false,
 	"hover"			=> false,
 	"edit"			=> array(	'color' 			=> array('type' => 'colorpicker', 'name'=> __("Font Color",'avia_framework')), 
 								'background_color' 	=> array('type' => 'colorpicker', 'name'=> __("Background Color",'avia_framework')),
 								'border_color' 		=> array('type' => 'colorpicker', 'name'=> __("Border Color",'avia_framework')),
-								'font_family' 		=> array('type' => 'font', 'name'=> __("Font Family",'avia_framework'), 'options' => $google_fonts),
 							)						
 );
 
@@ -239,65 +228,17 @@ $advanced['hover_overlay'] = array(
 	"group" 		=> __("Misc",'avia_framework'),
 	"description"	=> __("Change the styling for the overlay that appears when you place your mouse cursor above a linked image",'avia_framework'),
 	"selector"		=> array(  
-								"#top [sections] .image-overlay-inside" => array("overlay_style" => array( "none" , "display: none;") ),
-								"#top [sections] .image-overlay" 		=> array("background_color" => "background-color: %background_color%;", "overlay_style" => array( "hide" , "visibility: hidden;")),   
+								"#top [sections] .image-overlay" => array("background_color" => "background-color: %background_color%;"),   
 								"#top [sections] .image-overlay .image-overlay-inside:before" => array( "icon_color" => "background-color: %icon_color%;", "color" => "color: %color%;" )
 							),
-							
-							
 	"sections"		=> true,
 	"hover"			=> false,
-	"edit"			=> array(	'overlay_style' 	=> array('type' => 'select', 'name'=> __("Overlay Style",'avia_framework'), 'options' => array(__('Default','avia_framework') => '' , __('Minimal Overlay (No Icon)','avia_framework') =>'none' , __('Disable Overlay','avia_framework') =>'hide' )) ,		
-								'color' 			=> array('type' => 'colorpicker', 'name'=> __("Icon Color",'avia_framework')), 
+	"edit"			=> array(	'color' 			=> array('type' => 'colorpicker', 'name'=> __("Icon Color",'avia_framework')), 
 								'icon_color' 		=> array('type' => 'colorpicker', 'name'=> __("Icon background",'avia_framework')),
 								'background_color' 	=> array('type' => 'colorpicker', 'name'=> __("Overlay Color",'avia_framework')),
 							)						
 );
 
-
-$advanced['buttons'] = array(
-	"id"			=> "buttons", //needs to match array key
-	"name"			=> "Buttons",
-	"group" 		=> __("Misc",'avia_framework'),
-	"description"	=> __("Change the styling of your buttons",'avia_framework'),
-	"selector"		=> array("#top #wrap_all .avia-slideshow-button, #top .avia-button, .html_elegant-blog .more-link, .avia-slideshow-arrows a:before, #top .av-menu-button > a .avia-menu-text"=> ""),
-	"sections"		=> false,
-	"hover"			=> false,
-	"edit"			=> array(	
-								'border_radius' => array('type' => 'size', 'range' => '0-100', 'name'=> __("Border Radius",'avia_framework')),
-							)
-);
-
-
-$advanced['widget_title'] = array(
-	"id"			=> "widget_title", //needs to match array key
-	"name"			=> "Widget title",
-	"group" 		=> __("Misc",'avia_framework'),
-	"description"	=> __("Change the styling of your widget title",'avia_framework'),
-	"selector"		=> array(
-						"#top [sections] .widgettitle" => array("style" => array( "border" , "border-style:solid; border-width:1px; padding:10px; text-align:center; margin-bottom:15px") ),
-						"html #top [sections] .widgettitle" => array("style" => array( "border-tp" , "border-style:solid; border-width:1px; padding:10px 0; border-left:none; border-right:none; margin-bottom:15px") ),
-						"body#top [sections] .widgettitle" => array( "border_color" => "border-color: %border_color%;", "background_color" => "background-color: %background_color%;", "color" => "color: %color%;", "text_align" => "text-align: %text_align%;"),
-						
-							),
-	"sections"		=> true,
-	"hover"			=> false,
-	"edit"			=> array(	
-								'style' 	=> array(
-													'type' => 'select', 
-													'name'=> __("Overlay Style",'avia_framework'), 
-													'options' => array(
-														__('No Border','avia_framework') => '' , 
-														__('Border on top and bottom','avia_framework') =>'border-tp' , 
-														__('Border around the widget title','avia_framework') =>'border' , 
-													)
-												) ,
-								'border_color' => array('type' => 'colorpicker', 'name'=> __("Border Color",'avia_framework') ),
-								'background_color' => array('type' => 'colorpicker', 'name'=> __("Background Color",'avia_framework') ),
-								'color' => array('type' => 'colorpicker', 'name'=> __("Font Color",'avia_framework') ),
-								'text_align' 	=> array('type' => 'select', 'name'=> __("Text Align",'avia_framework'), 'options' => $align ),							
-							)
-);
 
 
 

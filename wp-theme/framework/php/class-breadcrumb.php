@@ -6,7 +6,7 @@ if(!class_exists('avia_breadcrumb'))
 	{
 		var $options;
 
-	function __construct($options = ""){
+	function avia_breadcrumb($options = ""){
 
 		$this->options = array( 	//change this array if you want another output scheme
 		'before' => '<span class="arrow"> ',

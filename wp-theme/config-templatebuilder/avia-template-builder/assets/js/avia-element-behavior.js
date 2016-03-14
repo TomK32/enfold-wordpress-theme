@@ -36,11 +36,8 @@
     	//functionallity that fetches the google maps coordinates
     	$.AviaElementBehavior.gmaps_fetcher(); 
     	
-    	if(typeof $.AviaElementBehavior.wp_save_template == 'function')
-    	{
     	//save template functionality avia-template-saving.js
     	new $.AviaElementBehavior.wp_save_template(); 
-        }
         
         //default tooltips for various elements like shortcodes
     	new $.AviaTooltip({attach:'body'});
@@ -52,7 +49,7 @@
 	
 	$.AviaElementBehavior.gmaps_fetcher =  function()
 	{	
-		var map_api 	= 'https://maps.googleapis.com/maps/api/js?v=3&callback=av_builder_maps_loaded', 
+		var map_api 	= 'https://maps.googleapis.com/maps/api/js?v=3&sensor=false&callback=av_builder_maps_loaded', 
 			loading 	= false,
 			clicked		= {};
 	

@@ -3,7 +3,8 @@
  * Display Numbers that count from 0 to the number you entered
  */
  
- if( !class_exists( 'Tribe__Events__Main' ) )
+ 
+ if( !class_exists( 'TribeEvents' ) )
 {
 	function av_countdown_events_fallback()
 	{
@@ -51,7 +52,7 @@ if ( !class_exists( 'avia_sc_events_countdown' ) )
 			function fetch_upcoming()
 			{
 				$query 		= array('paged'=> false, 'posts_per_page' => 1, 'eventDisplay' => 'list');
-				$upcoming 	= Tribe__Events__Query::getEvents( $query, true);
+				$upcoming 	= TribeEventsQuery::getEvents( $query, true);
 				
 				return $upcoming;
 			}

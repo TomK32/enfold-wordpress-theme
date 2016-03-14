@@ -300,12 +300,8 @@ if ( !class_exists( 'avia_sc_contact' ) )
 				$template = $this->update_template("label", __("Element", 'avia_framework' ). ": {{label}}");
 
 				$params['innerHtml']  = "";
-				$params['innerHtml'] .= "<div class='avia_title_container'>";
-				$params['innerHtml'] .=	"<div ".$this->class_by_arguments('check' ,$params['args']).">";
-				$params['innerHtml'] .= "<span {$template} >".__("Element", 'avia_framework' ). ": ".$params['args']['label']."</span>";
-				$params['innerHtml'] .= "<span class='av-required-indicator'> *</span>";
-				$params['innerHtml'] .=	"</div>";
-				$params['innerHtml'] .=	"</div>";
+				$params['innerHtml'] .= "<div class='avia_title_container' {$template}>".__("Element", 'avia_framework' ).": ".$params['args']['label']."</div>";
+
 				return $params;
 			}
 
@@ -359,8 +355,7 @@ if ( !class_exists( 'avia_sc_contact' ) )
 					"multiform"  			=> true, //allows creation of multiple forms without id collision
 					"label_first"  			=> true,
 					"redirect"				=> $redirect,
-					"placeholder"			=> $hide_labels,
-					"numeric_names"			=> true
+					"placeholder"			=> $hide_labels
 				);
 				
 				if(trim($form_args['myemail']) == '') $form_args['myemail'] = get_option('admin_email');
@@ -397,7 +392,7 @@ if ( !class_exists( 'avia_sc_contact' ) )
 			function helper_array2form_fields($base)
 			{
 				$form_fields = array();
-                $labels = array();
+                		$labels = array();
 
 
 				if(is_array($base))
