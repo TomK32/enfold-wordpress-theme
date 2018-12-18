@@ -1,7 +1,7 @@
 <?php
 /**
  * Code Block
- * Shortcode which creates a code element wrapped in a div - useful for text withour formatting like pre/code tags or scripts.
+ * Shortcode which creates a code element wrapped in a div - useful for text without formatting like pre/code tags or scripts.
  */
 
 if ( !class_exists( 'avia_sc_codeblock' ) )
